@@ -1,7 +1,9 @@
 package com.epam.esm.entity;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Ivan Velichko
@@ -11,11 +13,15 @@ public class GiftCertificate extends BaseEntity {
     private String name;
     private String description;
     private BigDecimal price;
-    private ZonedDateTime create_date;
-    private ZonedDateTime last_update_date;
+    private LocalDateTime create_date;
+    private LocalDateTime last_update_date;
     private int duration;
+    private Set<Tag> tags = new HashSet<>();
 
-    public GiftCertificate(long id, String name, String description, BigDecimal price, ZonedDateTime create_date, ZonedDateTime last_update_date, int duration) {
+    public GiftCertificate() {
+    }
+
+    public GiftCertificate(long id, String name, String description, BigDecimal price, LocalDateTime create_date, LocalDateTime last_update_date, int duration, Set<Tag> tags) {
         super(id);
         this.name = name;
         this.description = description;
@@ -23,6 +29,7 @@ public class GiftCertificate extends BaseEntity {
         this.create_date = create_date;
         this.last_update_date = last_update_date;
         this.duration = duration;
+        this.tags = tags;
     }
 
     public String getName() {
@@ -49,19 +56,19 @@ public class GiftCertificate extends BaseEntity {
         this.price = price;
     }
 
-    public ZonedDateTime getCreate_date() {
+    public LocalDateTime getCreate_date() {
         return create_date;
     }
 
-    public void setCreate_date(ZonedDateTime create_date) {
+    public void setCreate_date(LocalDateTime create_date) {
         this.create_date = create_date;
     }
 
-    public ZonedDateTime getLast_update_date() {
+    public LocalDateTime getLast_update_date() {
         return last_update_date;
     }
 
-    public void setLast_update_date(ZonedDateTime last_update_date) {
+    public void setLast_update_date(LocalDateTime last_update_date) {
         this.last_update_date = last_update_date;
     }
 
@@ -73,36 +80,32 @@ public class GiftCertificate extends BaseEntity {
         this.duration = duration;
     }
 
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         GiftCertificate that = (GiftCertificate) o;
 
-        if (getDuration() != that.getDuration()) {
+        if (getDuration() != that.getDuration()) return false;
+        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) return false;
+        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
             return false;
-        }
-        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+        if (getPrice() != null ? !getPrice().equals(that.getPrice()) : that.getPrice() != null) return false;
+        if (getCreate_date() != null ? !getCreate_date().equals(that.getCreate_date()) : that.getCreate_date() != null)
             return false;
-        }
-        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+        if (getLast_update_date() != null ? !getLast_update_date().equals(that.getLast_update_date()) : that.getLast_update_date() != null)
             return false;
-        }
-        if (getPrice() != null ? !getPrice().equals(that.getPrice()) : that.getPrice() != null) {
-            return false;
-        }
-        if (getCreate_date() != null ? !getCreate_date().equals(that.getCreate_date()) : that.getCreate_date() != null) {
-            return false;
-        }
-        return getLast_update_date() != null ? getLast_update_date().equals(that.getLast_update_date()) : that.getLast_update_date() == null;
+        return getTags() != null ? getTags().equals(that.getTags()) : that.getTags() == null;
     }
 
     @Override
@@ -114,6 +117,7 @@ public class GiftCertificate extends BaseEntity {
         result = 31 * result + (getCreate_date() != null ? getCreate_date().hashCode() : 0);
         result = 31 * result + (getLast_update_date() != null ? getLast_update_date().hashCode() : 0);
         result = 31 * result + getDuration();
+        result = 31 * result + (getTags() != null ? getTags().hashCode() : 0);
         return result;
     }
 
@@ -126,6 +130,7 @@ public class GiftCertificate extends BaseEntity {
         sb.append(", create_date=").append(create_date);
         sb.append(", last_update_date=").append(last_update_date);
         sb.append(", duration=").append(duration);
+        sb.append(", tags=").append(tags);
         sb.append('}');
         return sb.toString();
     }

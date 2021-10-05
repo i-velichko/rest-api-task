@@ -1,13 +1,12 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.converter.TagMapper;
+import com.epam.esm.converter.BaseEntityConverter;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,23 +16,29 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/tags")
 public class TagController {
-    private final TagMapper tagMapper;
+    private final BaseEntityConverter tagConverter;
     private final TagService tagService;
 
     @Autowired
-    public TagController(TagMapper tagMapper, TagService tagService) {
-        this.tagMapper = tagMapper;
+    public TagController(@Qualifier("tagConverter") BaseEntityConverter tagConverter, TagService tagService) {
+        this.tagConverter = tagConverter;
         this.tagService = tagService;
     }
 
-    @Autowired
+    @GetMapping(value = "/{id}")
+    public TagDto findTagById(@PathVariable("id") long id) {
+        Tag tag = tagService.findById(id);
+        return (TagDto) tagConverter.convertToDto(tag);
 
 
-    @GetMapping("/tags")
+    }
+
+    @GetMapping
     public List<TagDto> showAll() {
         List<Tag> tags = tagService.findAll();
-        return tagMapper.convertAllToDtoList(tags);
+        return tagConverter.convertAllToDtoList(tags);
     }
+
 }

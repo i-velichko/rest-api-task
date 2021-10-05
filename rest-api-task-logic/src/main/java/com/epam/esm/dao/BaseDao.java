@@ -9,12 +9,15 @@ import java.util.Optional;
  * @author Ivan Velichko
  * @date 01.10.2021 17:24
  */
-public interface BaseDao<K,T extends BaseEntity> {
+public interface BaseDao<T extends BaseEntity> {
+    T create(T entity);
 
-    T create (T entity);
     List<T> findAll();
-    Optional<T> findById(K id);
-    Optional<T> update(K id);
-    boolean delete(K id);
+
+    T findById(long id);
+
+    T update(long id);
+
+    boolean delete(long id);
 
 }

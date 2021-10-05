@@ -1,10 +1,9 @@
 package com.epam.esm.converter.impl;
 
-import com.epam.esm.converter.TagMapper;
+import com.epam.esm.converter.BaseEntityConverter;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
  */
 
 @Component
-public class TagMapperImpl implements TagMapper {
+public class TagConverter implements BaseEntityConverter<Tag, TagDto> {
 
     @Override
     public List<TagDto> convertAllToDtoList(List<Tag> tags) {
@@ -30,13 +29,13 @@ public class TagMapperImpl implements TagMapper {
     }
 
     @Override
-    public Tag convertToTag(TagDto tagDto) {
+    public Tag convertToEntity(TagDto tagDto) {
         return new Tag(tagDto.getId(), tagDto.getName());
     }
 
     @Override
-    public List<Tag> convertAllToTagList(List<TagDto> tagDtoList) {
+    public List<Tag> convertAllToEntityList(List<TagDto> tagDtoList) {
         return tagDtoList
-                .stream().map(this::convertToTag).collect(Collectors.toList());
+                .stream().map(this::convertToEntity).collect(Collectors.toList());
     }
 }

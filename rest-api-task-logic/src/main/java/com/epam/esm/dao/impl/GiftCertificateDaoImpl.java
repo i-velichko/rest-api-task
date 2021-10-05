@@ -1,16 +1,30 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.BaseDao;
 import com.epam.esm.entity.GiftCertificate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Ivan Velichko
  * @date 01.10.2021 17:44
  */
-public class GiftCertificateDaoImpl implements GiftCertificateDao {
+
+@Component
+public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
+    private final JdbcTemplate jdbcTemplate;
+
+    private static final String FIND_ALL_CERTIFICATES_SQL = "SELECT * FROM gift_certificate";
+
+    @Autowired
+    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Override
     public GiftCertificate create(GiftCertificate entity) {
         return null;
@@ -18,21 +32,21 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> findAll() {
+        return jdbcTemplate.query(FIND_ALL_CERTIFICATES_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class));
+    }
+
+    @Override
+    public GiftCertificate findById(long id) {
         return null;
     }
 
     @Override
-    public Optional<GiftCertificate> findById(Long id) {
-        return Optional.empty();
+    public GiftCertificate update(long id) {
+        return null;
     }
 
     @Override
-    public Optional<GiftCertificate> update(Long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         return false;
     }
 }

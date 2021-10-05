@@ -23,7 +23,7 @@ public class SpringJdbcConfig {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/gift_certificates");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("September3211711");
+        dataSource.setPassword("root");
 
         return dataSource;
     }
