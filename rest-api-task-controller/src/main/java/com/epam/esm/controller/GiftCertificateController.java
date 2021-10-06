@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/certificates")
+@RequestMapping("/v1/certificates")
 public class GiftCertificateController {
     private final BaseEntityConverter giftCertificateConverter;
     private final GiftCertificateService giftCertificateService;

@@ -18,7 +18,7 @@ import java.util.List;
 public class TagDaoImpl implements BaseDao<Tag> {
     private final JdbcTemplate jdbcTemplate;
 
-    private static final String FIND_ALL_TAGS_SQL = "SELECT * FROM tag";
+    private static final String FIND_ALL_TAGS_SQL = "SELECT id, name FROM tag";
     private static final String FIND_TAG_BY_ID_SQL = FIND_ALL_TAGS_SQL + " WHERE id =?";
     private static final String CREATE_NEW_TAG_SQL = "INSERT INTO tag(name) VALUES (?)";
 
@@ -42,14 +42,13 @@ public class TagDaoImpl implements BaseDao<Tag> {
 
     @Override
     public Tag findById(long id) {
-        Tag tag = jdbcTemplate.queryForObject(FIND_TAG_BY_ID_SQL, new BeanPropertyRowMapper<>(Tag.class), id);
-        return tag;
+       return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_SQL, new BeanPropertyRowMapper<>(Tag.class), id);
     }
 
     @Override
     public Tag update(long id) {
         return null;
-    }
+    } //todo boolean
 
     @Override
     public boolean delete(long id) {

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
-    private GiftCertificateDaoImpl giftCertificateDao;
+    private final GiftCertificateDaoImpl giftCertificateDao;
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDaoImpl giftCertificateDao) {

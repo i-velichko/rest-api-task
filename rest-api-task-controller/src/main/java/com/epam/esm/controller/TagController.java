@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/v1/tags")
 public class TagController {
     private final BaseEntityConverter tagConverter;
     private final TagService tagService;

@@ -1,11 +1,12 @@
 package com.epam.esm.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
@@ -15,21 +16,40 @@ import javax.sql.DataSource;
  */
 
 @Configuration
+@PropertySource("classpath:database.properties")
 public class SpringJdbcConfig {
 
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/gift_certificates");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("root");
+    @Value("${dataSource.driverClassName}")
+    private String driverClass;
+    @Value("${dataSource.dbUrl}")
+    private String dbUrl;
+    @Value("${dataSource.userName}")
+    private String userName;
+    @Value("${dataSource.password}")
+    private String password;
+    @Value("${dataSource.maxPoolSize}")
+    private int maxPoolSize;
 
-        return dataSource;
+    @Bean
+    public HikariConfig getHikariConfig() {
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName(driverClass);
+        config.setJdbcUrl(dbUrl);
+        config.setUsername(userName);
+        config.setPassword(password);
+        config.setMaximumPoolSize(maxPoolSize);
+        return config;
+    }
+
+
+    @Bean
+    public DataSource dataSource(HikariConfig hikariConfig) {
+        return new HikariDataSource(hikariConfig);
+
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }
