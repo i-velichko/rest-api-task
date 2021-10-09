@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ivan Velichko
@@ -34,10 +36,27 @@ public class GiftCertificateController {
         return giftCertificateConverter.convertToDto(giftCertificate);
     }
 
-    @GetMapping
-    public List<GiftCertificateDto> showAll() {
-        List<GiftCertificate> certificates = giftCertificateService.findAll();
-        return giftCertificateConverter.convertAllToDtoList(certificates);
+    @GetMapping()
+    public List<GiftCertificateDto> findAll(
+            @RequestParam(required = false, name = "tag") String tag,
+            @RequestParam(required = false, name = "search") String search,
+            @RequestParam(required = false, name = "sort") String sort,
+            @RequestParam(required = false, name = "order", defaultValue = "ASC") String order) {
+
+
+        if (tag == null && search == null && sort == null && order == null) {
+
+            List<GiftCertificate> giftCertificates = giftCertificateService.findAll();
+            return giftCertificateConverter.convertAllToDtoList(giftCertificates);
+        } else {
+            Map<String, String> params = new HashMap<>();
+            params.put("tag", tag);
+            params.put("search", search);
+            params.put("sort", sort);
+            params.put("order", order);
+            List<GiftCertificate> allByParam = giftCertificateService.findAllByParam(params);
+            return giftCertificateConverter.convertAllToDtoList(allByParam);
+        }
     }
 
     @PostMapping

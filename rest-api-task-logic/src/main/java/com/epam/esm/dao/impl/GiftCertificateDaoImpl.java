@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.BaseDao;
 import com.epam.esm.dao.mapper.GiftCertificateExtractor;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
+import com.epam.esm.dao.qury.QueryBuilder;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.sql.Types.*;
@@ -29,15 +31,15 @@ import static java.sql.Types.*;
 @Component
 public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     private final JdbcTemplate jdbcTemplate;
-    private final GiftCertificateMapper giftCertificateMapper;
-    private GiftCertificateExtractor giftCertificateExtractor;
+    private final GiftCertificateExtractor giftCertificateExtractor;
+    private final QueryBuilder queryBuilder;
 
     private static final String FIND_ALL_CERTIFICATES_WITH_TAGS_SQL = "SELECT c.id, c.name, " +
             "c.description, c.price, c.create_date, c.last_update_date, c.duration, " +
             "t.id as tag_id, t.name as tag_name " +
             "FROM gift_certificate as c " +
             "LEFT JOIN certificates_tags ct ON c.id = ct.certificate_id " +
-            "LEFT JOIN tag t on t.id = ct.tag_id";
+            "LEFT JOIN tag t on t.id = ct.tag_id ";
     private static final String FIND_CERTIFICATE_BY_ID_SQL = FIND_ALL_CERTIFICATES_WITH_TAGS_SQL + " WHERE c.id =?";
     private static final String FIND_CERTIFICATE_BY_NAME_SQL = FIND_ALL_CERTIFICATES_WITH_TAGS_SQL + " WHERE c.name =?";
     private static final String UPDATE_GIFT_CERTIFICATE_SQL = "UPDATE gift_certificate SET name = ?, description = ?, " +
@@ -46,11 +48,10 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
             "(name, description, price, duration) VALUES (?, ?, ?, ?)";
 
     @Autowired
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper,
-                                  GiftCertificateExtractor giftCertificateExtractor) {
+    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateExtractor giftCertificateExtractor, QueryBuilder queryBuilder) {
         this.jdbcTemplate = jdbcTemplate;
-        this.giftCertificateMapper = giftCertificateMapper;
         this.giftCertificateExtractor = giftCertificateExtractor;
+        this.queryBuilder = queryBuilder;
     }
 
     @Override
@@ -83,6 +84,7 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
         return jdbcTemplate.query(FIND_CERTIFICATE_BY_NAME_SQL, giftCertificateExtractor, name).stream().findAny();
     }
 
+    @Override
     public void update(GiftCertificate giftCertificate) {
         jdbcTemplate.update(con -> {
                     PreparedStatement statement = con.prepareStatement(UPDATE_GIFT_CERTIFICATE_SQL,
@@ -96,6 +98,12 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
                 }
         );
 
+    }
+
+    public List<GiftCertificate> findAllByParam(Map<String, String> params) {
+        params.put("query", FIND_ALL_CERTIFICATES_WITH_TAGS_SQL);
+        String sqlQuery = queryBuilder.buildQueryForSearch(params);
+        return jdbcTemplate.query(sqlQuery, giftCertificateExtractor);
     }
 
     @Override
