@@ -1,14 +1,11 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.converter.BaseEntityConverter;
+import com.epam.esm.converter.impl.GiftCertificateConverter;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,19 +17,31 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/certificates")
 public class GiftCertificateController {
-    private final BaseEntityConverter giftCertificateConverter;
+    private final GiftCertificateConverter giftCertificateConverter;
     private final GiftCertificateService giftCertificateService;
 
     @Autowired
-    public GiftCertificateController(@Qualifier("giftCertificateConverter") BaseEntityConverter giftCertificateConverter
+    public GiftCertificateController(GiftCertificateConverter giftCertificateConverter
             , GiftCertificateService giftCertificateService) {
         this.giftCertificateConverter = giftCertificateConverter;
         this.giftCertificateService = giftCertificateService;
+    }
+
+    @GetMapping(value = "/{id}")
+    public GiftCertificateDto findCertificateById(@PathVariable("id") long id) {
+        GiftCertificate giftCertificate = giftCertificateService.findById(id);
+        return giftCertificateConverter.convertToDto(giftCertificate);
     }
 
     @GetMapping
     public List<GiftCertificateDto> showAll() {
         List<GiftCertificate> certificates = giftCertificateService.findAll();
         return giftCertificateConverter.convertAllToDtoList(certificates);
+    }
+
+    @PatchMapping
+    public void update(@RequestBody GiftCertificateDto giftCertificateDto) {
+        GiftCertificate giftCertificate = giftCertificateConverter.convertToEntity(giftCertificateDto);
+        giftCertificateService.update(giftCertificate);
     }
 }

@@ -2,6 +2,7 @@ package com.epam.esm.exception;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class CustomControllerAdvisor {
     private ResourceBundleMessageSource resourceBundleMessageSource;
     private static final String ENTITY_NOT_FOUND = "error.entity.not.found.";
+    private static final String TAG_CAN_NOT_BE_REMOVED = "error.tag.cant.remove";
     private static final List<String> AVAILABLE_LOCALES = Arrays.asList("en_US", "ru_RU");
     private static final Locale DEFAULT_LOCALE = new Locale("en", "US");
 
@@ -43,8 +45,14 @@ public class CustomControllerAdvisor {
     public ResponseEntity<CustomResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException e, Locale locale) {
         String msg = getEntityNameByMsg(e, ".", "Dao").toLowerCase(Locale.ROOT);
         String localeMsg = resolveResourceBundle(ENTITY_NOT_FOUND + msg, locale);
-        CustomResponse response = new CustomResponse(
-                localeMsg, 40401);
+        CustomResponse response = new CustomResponse(localeMsg, 40402);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<CustomResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e, Locale locale) {
+        String localeMsg = resolveResourceBundle(TAG_CAN_NOT_BE_REMOVED, locale);
+        CustomResponse response = new CustomResponse(localeMsg, 40403);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 

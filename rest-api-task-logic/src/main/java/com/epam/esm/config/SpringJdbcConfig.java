@@ -41,15 +41,14 @@ public class SpringJdbcConfig {
         return config;
     }
 
-
     @Bean
     public DataSource dataSource(HikariConfig hikariConfig) {
         return new HikariDataSource(hikariConfig);
-
     }
 
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
+
 }

@@ -7,6 +7,9 @@ package com.epam.esm.dto;
 public abstract class BaseDto {
     private long id;
 
+    public BaseDto() {
+    }
+
     public BaseDto(long id) {
         this.id = id;
     }

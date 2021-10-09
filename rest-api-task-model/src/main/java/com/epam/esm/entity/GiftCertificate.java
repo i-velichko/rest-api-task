@@ -13,23 +13,32 @@ public class GiftCertificate extends BaseEntity {
     private String name;
     private String description;
     private BigDecimal price;
-    private LocalDateTime create_date;
-    private LocalDateTime last_update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime lastUpdateDate;
     private int duration;
     private Set<Tag> tags = new HashSet<>();
 
     public GiftCertificate() {
     }
 
-    public GiftCertificate(long id, String name, String description, BigDecimal price, LocalDateTime create_date, LocalDateTime last_update_date, int duration, Set<Tag> tags) {
+    public GiftCertificate(long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, int duration, Set<Tag> tags) {
         super(id);
         this.name = name;
         this.description = description;
         this.price = price;
-        this.create_date = create_date;
-        this.last_update_date = last_update_date;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
         this.duration = duration;
         this.tags = tags;
+    }
+
+    public GiftCertificate(String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, int duration) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.duration = duration;
     }
 
     public String getName() {
@@ -56,20 +65,20 @@ public class GiftCertificate extends BaseEntity {
         this.price = price;
     }
 
-    public LocalDateTime getCreate_date() {
-        return create_date;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setCreate_date(LocalDateTime create_date) {
-        this.create_date = create_date;
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
 
-    public LocalDateTime getLast_update_date() {
-        return last_update_date;
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
-    public void setLast_update_date(LocalDateTime last_update_date) {
-        this.last_update_date = last_update_date;
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 
     public int getDuration() {
@@ -101,9 +110,9 @@ public class GiftCertificate extends BaseEntity {
         if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
             return false;
         if (getPrice() != null ? !getPrice().equals(that.getPrice()) : that.getPrice() != null) return false;
-        if (getCreate_date() != null ? !getCreate_date().equals(that.getCreate_date()) : that.getCreate_date() != null)
+        if (getCreateDate() != null ? !getCreateDate().equals(that.getCreateDate()) : that.getCreateDate() != null)
             return false;
-        if (getLast_update_date() != null ? !getLast_update_date().equals(that.getLast_update_date()) : that.getLast_update_date() != null)
+        if (getLastUpdateDate() != null ? !getLastUpdateDate().equals(that.getLastUpdateDate()) : that.getLastUpdateDate() != null)
             return false;
         return getTags() != null ? getTags().equals(that.getTags()) : that.getTags() == null;
     }
@@ -114,8 +123,8 @@ public class GiftCertificate extends BaseEntity {
         result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
         result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
-        result = 31 * result + (getCreate_date() != null ? getCreate_date().hashCode() : 0);
-        result = 31 * result + (getLast_update_date() != null ? getLast_update_date().hashCode() : 0);
+        result = 31 * result + (getCreateDate() != null ? getCreateDate().hashCode() : 0);
+        result = 31 * result + (getLastUpdateDate() != null ? getLastUpdateDate().hashCode() : 0);
         result = 31 * result + getDuration();
         result = 31 * result + (getTags() != null ? getTags().hashCode() : 0);
         return result;
@@ -127,8 +136,8 @@ public class GiftCertificate extends BaseEntity {
         sb.append("name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", price=").append(price);
-        sb.append(", create_date=").append(create_date);
-        sb.append(", last_update_date=").append(last_update_date);
+        sb.append(", create_date=").append(createDate);
+        sb.append(", last_update_date=").append(lastUpdateDate);
         sb.append(", duration=").append(duration);
         sb.append(", tags=").append(tags);
         sb.append('}');

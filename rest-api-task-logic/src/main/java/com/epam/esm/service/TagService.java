@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface TagService {
     List<Tag> findAll();
     Tag findById(long id);
+    Tag findByName(String name);
+    boolean delete(long id);
 }

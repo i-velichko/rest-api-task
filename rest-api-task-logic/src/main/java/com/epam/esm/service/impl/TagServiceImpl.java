@@ -5,7 +5,6 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.NoSuchEntityException;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +31,20 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag findById(long id) {
-            Tag tag = tagDao.findById(id);
-            return tag;
+        Optional<Tag> byId = tagDao.findById(id);
+        return byId.orElseThrow(() -> new NoSuchEntityException("tag not found"));
+    }
+
+    @Override
+    public Tag findByName(String name) {
+        Optional<Tag> byName = tagDao.findByName(name);
+        return byName.orElseThrow(() -> new NoSuchEntityException("tag not found"));
+    }
+
+    @Override
+    public boolean delete(long id) {
+        //todo check is used count where tagid == id and if used throw my Exc
+
+        return tagDao.delete(id);
     }
 }

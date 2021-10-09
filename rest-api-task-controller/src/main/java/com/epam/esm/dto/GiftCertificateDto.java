@@ -15,20 +15,34 @@ public class GiftCertificateDto extends BaseDto{
     private String name;
     private String description;
     private BigDecimal price;
-    private LocalDateTime create_date;
-    private LocalDateTime last_update_date;
+    private LocalDateTime createDate;
+    private LocalDateTime lastUpdateDate;
     private int duration;
     private Set<Tag> tags;
 
-    public GiftCertificateDto(long id, String name, String description, BigDecimal price, LocalDateTime create_date, LocalDateTime last_update_date, int duration, Set<Tag> tags) {
+    public GiftCertificateDto() {
+    }
+
+    public GiftCertificateDto(long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, int duration, Set<Tag> tags) {
         super(id);
         this.name = name;
         this.description = description;
         this.price = price;
-        this.create_date = create_date;
-        this.last_update_date = last_update_date;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
         this.duration = duration;
         this.tags = tags;
+
+    }
+
+    public GiftCertificateDto(long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, int duration) {
+        super(id);
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.duration = duration;
     }
 
     public String getName() {
@@ -55,20 +69,20 @@ public class GiftCertificateDto extends BaseDto{
         this.price = price;
     }
 
-    public LocalDateTime getCreate_date() {
-        return create_date;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setCreate_date(LocalDateTime create_date) {
-        this.create_date = create_date;
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
 
-    public LocalDateTime getLast_update_date() {
-        return last_update_date;
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
     }
 
-    public void setLast_update_date(LocalDateTime last_update_date) {
-        this.last_update_date = last_update_date;
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 
     public int getDuration() {
@@ -93,8 +107,8 @@ public class GiftCertificateDto extends BaseDto{
         sb.append("name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", price=").append(price);
-        sb.append(", create_date=").append(create_date);
-        sb.append(", last_update_date=").append(last_update_date);
+        sb.append(", create_date=").append(createDate);
+        sb.append(", last_update_date=").append(lastUpdateDate);
         sb.append(", duration=").append(duration);
         sb.append(", tags=").append(tags);
         sb.append('}');
