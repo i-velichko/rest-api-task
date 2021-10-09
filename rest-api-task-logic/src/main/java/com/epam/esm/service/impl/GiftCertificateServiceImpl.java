@@ -4,8 +4,10 @@ import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DuplicateEntityException;
 import com.epam.esm.exception.NoSuchEntityException;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.util.GiftCertificateMerger;
 import com.epam.esm.validator.impl.GiftCertificateDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Ivan Velichko
@@ -46,11 +49,31 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
+    public GiftCertificate create(GiftCertificate giftCertificate) {
+        GiftCertificate toCreate;
+        boolean ifExist = giftCertificateDao.findByName(giftCertificate.getName()).isPresent();
+        if (!ifExist && giftCertificateDataValidator.checkDataForCreateCertificate(giftCertificate)) {
+            toCreate = giftCertificateDao.create(giftCertificate);
+            long certificateId = toCreate.getId();
+            Set<Tag> tags = toCreate.getTags();
+            if (tags.size() > 0) {
+                tags.forEach(tag -> tagDao.createWithReference(tag, certificateId));
+            }
+        } else {
+            throw new DuplicateEntityException("can not create certificate");
+        }
+
+        return toCreate;
+    }
+
+    @Override
+    @Transactional
     public void update(GiftCertificate toUpdate) {
         if (toUpdate != null) {
             GiftCertificate previous = findById(toUpdate.getId());
-            GiftCertificate checkedToUpdate = giftCertificateDataValidator.checkDataForUpdate(toUpdate, previous);
-            if (checkedToUpdate != null ) {
+            GiftCertificate checkedToUpdate = giftCertificateDataValidator.checkDataForUpdateCertificate(toUpdate, previous);
+            if (checkedToUpdate != null) {
+                GiftCertificateMerger.merge(checkedToUpdate, previous);
                 giftCertificateDao.update(previous);
                 previous.getTags()
                         .stream().filter(tag -> tagDao.findByName(tag.getName()).isEmpty())

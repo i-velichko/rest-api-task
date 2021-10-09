@@ -2,11 +2,14 @@ package com.epam.esm.controller;
 
 import com.epam.esm.converter.BaseEntityConverter;
 import com.epam.esm.converter.impl.TagConverter;
+import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,11 +37,6 @@ public class TagController {
         return tagConverter.convertToDto(tag);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public boolean deleteById(@PathVariable("id") long id) {
-        return tagService.delete(id);
-    }
-
     @GetMapping(params = "name")
     public TagDto findTagByName(@RequestParam(value = "name") String name) {
         Tag tag = tagService.findByName(name);
@@ -51,9 +49,16 @@ public class TagController {
         return tagConverter.convertAllToDtoList(tags);
     }
 
-    @PutMapping
-    public void create(@RequestBody TagDto tagDto) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Tag create(@RequestBody TagDto tagDto) {
+        Tag tag = tagConverter.convertToEntity(tagDto);
+        return tagService.create(tag);
+    }
 
+    @DeleteMapping(value = "/{id}")
+    public boolean deleteById(@PathVariable("id") long id) {
+        return tagService.delete(id);
     }
 
 }

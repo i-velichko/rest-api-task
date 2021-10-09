@@ -4,12 +4,17 @@ import com.epam.esm.dao.BaseDao;
 import com.epam.esm.dao.mapper.GiftCertificateExtractor;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +32,6 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     private final GiftCertificateMapper giftCertificateMapper;
     private GiftCertificateExtractor giftCertificateExtractor;
 
-    private static final String FIND_ALL_CERTIFICATES_SQL =
-            "SELECT id, name, description, price, create_date, last_update_date, duration FROM gift_certificate";
     private static final String FIND_ALL_CERTIFICATES_WITH_TAGS_SQL = "SELECT c.id, c.name, " +
             "c.description, c.price, c.create_date, c.last_update_date, c.duration, " +
             "t.id as tag_id, t.name as tag_name " +
@@ -36,8 +39,11 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
             "LEFT JOIN certificates_tags ct ON c.id = ct.certificate_id " +
             "LEFT JOIN tag t on t.id = ct.tag_id";
     private static final String FIND_CERTIFICATE_BY_ID_SQL = FIND_ALL_CERTIFICATES_WITH_TAGS_SQL + " WHERE c.id =?";
+    private static final String FIND_CERTIFICATE_BY_NAME_SQL = FIND_ALL_CERTIFICATES_WITH_TAGS_SQL + " WHERE c.name =?";
     private static final String UPDATE_GIFT_CERTIFICATE_SQL = "UPDATE gift_certificate SET name = ?, description = ?, " +
             "price = ?, last_update_date=NOW(), duration = ? WHERE id = ?";
+    private static final String CREATE_NEW_CERTIFICATE_SQL = "INSERT INTO gift_certificate " +
+            "(name, description, price, duration) VALUES (?, ?, ?, ?)";
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper,
@@ -48,8 +54,18 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     }
 
     @Override
-    public GiftCertificate create(GiftCertificate entity) {
-        return null;
+    public GiftCertificate create(GiftCertificate giftCertificate) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement statement = con.prepareStatement(CREATE_NEW_CERTIFICATE_SQL, new String[]{"id"});
+            statement.setString(1, giftCertificate.getName());
+            statement.setString(2, giftCertificate.getDescription());
+            statement.setBigDecimal(3, giftCertificate.getPrice());
+            statement.setInt(4, giftCertificate.getDuration());
+            return statement;
+        }, keyHolder);
+        giftCertificate.setId(keyHolder.getKey().longValue());
+        return giftCertificate;
     }
 
     @Override
@@ -64,7 +80,7 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
 
     @Override
     public Optional<GiftCertificate> findByName(String name) {
-        return null;
+        return jdbcTemplate.query(FIND_CERTIFICATE_BY_NAME_SQL, giftCertificateExtractor, name).stream().findAny();
     }
 
     public void update(GiftCertificate giftCertificate) {

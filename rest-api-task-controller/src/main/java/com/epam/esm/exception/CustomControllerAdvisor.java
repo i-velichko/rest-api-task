@@ -40,6 +40,13 @@ public class CustomControllerAdvisor {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(DuplicateEntityException.class)
+    public ResponseEntity<CustomResponse> handleDuplicateEntityException(DuplicateEntityException e) {
+        String message = String.format("%s %s", LocalDateTime.now(), e.getMessage());
+        CustomResponse response = new CustomResponse(message, 40404);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<CustomResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException e, Locale locale) {

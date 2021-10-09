@@ -13,5 +13,6 @@ public interface TagService {
     List<Tag> findAll();
     Tag findById(long id);
     Tag findByName(String name);
+    Tag create(Tag tag);
     boolean delete(long id);
 }

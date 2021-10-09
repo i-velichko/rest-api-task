@@ -2,8 +2,10 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DuplicateEntityException;
 import com.epam.esm.exception.NoSuchEntityException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.validator.impl.TagDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +20,12 @@ import java.util.Optional;
 @Service
 public class TagServiceImpl implements TagService {
     private final TagDaoImpl tagDao;
+    private final TagDataValidator tagDataValidator;
 
     @Autowired
-    public TagServiceImpl(TagDaoImpl tagDao) {
+    public TagServiceImpl(TagDaoImpl tagDao, TagDataValidator tagDataValidator) {
         this.tagDao = tagDao;
+        this.tagDataValidator = tagDataValidator;
     }
 
     @Override
@@ -42,9 +46,19 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public boolean delete(long id) {
-        //todo check is used count where tagid == id and if used throw my Exc
+    public Tag create(Tag tag) {
+        Tag toCreate;
+        boolean ifExist = tagDao.findByName(tag.getName()).isPresent();
+        if (!ifExist && tagDataValidator.isValid(tag)) {
+            toCreate = tagDao.create(tag);
+        } else {
+            throw new DuplicateEntityException("can not create tag");
+        }
+        return toCreate;
+    }
 
+    @Override
+    public boolean delete(long id) {
         return tagDao.delete(id);
     }
 }

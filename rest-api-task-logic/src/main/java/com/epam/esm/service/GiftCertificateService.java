@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.exception.DuplicateEntityException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,10 @@ import java.util.Optional;
  */
 public interface GiftCertificateService {
     GiftCertificate findById(long id);
+
     List<GiftCertificate> findAll();
+
+    GiftCertificate create(GiftCertificate giftCertificate) throws DuplicateEntityException;
+
     void update(GiftCertificate giftCertificate);
 }

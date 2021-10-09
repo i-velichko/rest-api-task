@@ -5,6 +5,7 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,13 @@ public class GiftCertificateController {
     public List<GiftCertificateDto> showAll() {
         List<GiftCertificate> certificates = giftCertificateService.findAll();
         return giftCertificateConverter.convertAllToDtoList(certificates);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public GiftCertificate create(@RequestBody GiftCertificateDto certificateDto) {
+        GiftCertificate giftCertificate = giftCertificateConverter.convertToEntity(certificateDto);
+        return giftCertificateService.create(giftCertificate);
     }
 
     @PatchMapping

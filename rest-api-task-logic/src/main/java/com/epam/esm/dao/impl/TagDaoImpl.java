@@ -44,9 +44,8 @@ public class TagDaoImpl implements BaseDao<Tag> {
             PreparedStatement statement = con.prepareStatement(CREATE_NEW_TAG_SQL, new String[]{"id"});
             statement.setString(1, tag.getName());
             return statement;
-
         }, keyHolder);
-        Long id = keyHolder.getKey().longValue();
+        long id = keyHolder.getKey().longValue();
         tag.setId(id);
         return tag;
     }
