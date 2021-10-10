@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ import java.util.Optional;
  * @date 01.10.2021 17:44
  */
 
-@Component
+@Repository
 public class TagDaoImpl implements BaseDao<Tag> {
     private final JdbcTemplate jdbcTemplate;
 

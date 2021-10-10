@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(classes = {TestConfig.class})
 class GiftCertificateDaoImplTest {
     private static final int EXPECTED_FILTER_CERTIFICATES_LIST_SIZE_WHEN_PARAMS_NOT_EXIST = 0;
-    private final GiftCertificateDaoImpl certificateDao;
+    private final GiftCertificateDaoImpl toTest;
     private static GiftCertificate giftCertificate;
     private static Map<String, String> filterParams;
 
@@ -38,7 +38,7 @@ class GiftCertificateDaoImplTest {
 
     @Autowired
     public GiftCertificateDaoImplTest(GiftCertificateDaoImpl certificateDao) {
-        this.certificateDao = certificateDao;
+        this.toTest = certificateDao;
     }
 
     @BeforeEach
@@ -53,7 +53,7 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void create() {
-        GiftCertificate actual = certificateDao.create(giftCertificate);
+        GiftCertificate actual = toTest.create(giftCertificate);
         assertEquals(actual.getName(), NEW_NAME);
         assertEquals(actual.getDescription(), NEW_DESCRIPTION);
         assertEquals(actual.getPrice(), NEW_PRICE);
@@ -62,45 +62,45 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void findAll() {
-        int actualSize = certificateDao.findAll().size();
+        int actualSize = toTest.findAll().size();
         assertEquals(EXPECTED_CERTIFICATES_LIST_SIZE, actualSize);
     }
 
     @Test
     void findByIdPositive() {
-        Optional<GiftCertificate> actual = certificateDao.findById(CERTIFICATE_ID);
+        Optional<GiftCertificate> actual = toTest.findById(CERTIFICATE_ID);
         assertTrue(actual.isPresent());
     }
 
     @Test
     void findByIdNegativeWhenIdNotExist() {
-        Optional<GiftCertificate> actual = certificateDao.findById(NOT_EXIST_ID);
+        Optional<GiftCertificate> actual = toTest.findById(NOT_EXIST_ID);
         assertTrue(actual.isEmpty());
     }
 
     @Test
     void findByNamePositive() {
-        Optional<GiftCertificate> actual = certificateDao.findByName(NEW_NAME);
+        Optional<GiftCertificate> actual = toTest.findByName(NEW_NAME);
         assertTrue(actual.isPresent());
     }
 
     @Test
     void findByNameNegativeWhenNameNotPresent() {
-        Optional<GiftCertificate> actual = certificateDao.findByName(NOT_EXIST_NAME);
+        Optional<GiftCertificate> actual = toTest.findByName(NOT_EXIST_NAME);
         assertTrue(actual.isEmpty());
     }
 
 
     @Test
     void findAllByParamPositive() {
-        int actualSize = certificateDao.findAllByParam(filterParams).size();
+        int actualSize = toTest.findAllByParam(filterParams).size();
         assertEquals(EXPECTED_FILTER_CERTIFICATES_LIST_SIZE, actualSize);
     }
 
     @Test
     void findAllByParamPositiveNegative() {
         filterParams.put("tag", "IBA");
-        int actualSize = certificateDao.findAllByParam(filterParams).size();
+        int actualSize = toTest.findAllByParam(filterParams).size();
         assertEquals(EXPECTED_FILTER_CERTIFICATES_LIST_SIZE_WHEN_PARAMS_NOT_EXIST, actualSize);
     }
 

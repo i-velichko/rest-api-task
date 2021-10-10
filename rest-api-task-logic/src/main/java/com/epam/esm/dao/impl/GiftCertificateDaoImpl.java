@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ import static java.sql.Types.*;
  * @date 01.10.2021 17:44
  */
 
-@Component
+@Repository
 public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateExtractor giftCertificateExtractor;
