@@ -108,7 +108,7 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
 
     @Override
     public boolean delete(long id) {
-        return false;
+        throw new UnsupportedOperationException("Operation is not supported");
     }
 
 }

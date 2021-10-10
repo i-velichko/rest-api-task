@@ -57,7 +57,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificate create(GiftCertificate giftCertificate) {
         GiftCertificate toCreate;
-        boolean ifExist = giftCertificateDao.findByName(giftCertificate.getName()).isPresent();
+        boolean ifExist = giftCertificateDao.findById(giftCertificate.getId()).isPresent();
         if (!ifExist && giftCertificateDataValidator.checkDataForCreateCertificate(giftCertificate)) {
             toCreate = giftCertificateDao.create(giftCertificate);
             long certificateId = toCreate.getId();

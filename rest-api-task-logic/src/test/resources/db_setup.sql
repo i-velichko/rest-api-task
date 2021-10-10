@@ -10,6 +10,7 @@ VALUES ('i'),
        ('epam');
 
 INSERT INTO certificates_tags (certificate_id, tag_id)
-VALUES (1, 1),
+VALUES (1, 4),
        (1, 3),
-       (2, 2);
+       (2, 2),
+       (3, 4);
