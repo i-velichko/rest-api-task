@@ -1,9 +1,7 @@
 package com.epam.esm.converter;
 
 import com.epam.esm.dto.BaseDto;
-import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.BaseEntity;
-import com.epam.esm.entity.Tag;
 
 import java.util.List;
 
@@ -14,7 +12,10 @@ import java.util.List;
 public interface BaseEntityConverter<K extends BaseEntity, T extends BaseDto> {
 
     T convertToDto(K k);
-    List<T> convertAllToDtoList(List<K> list );
+
+    List<T> convertAllToDtoList(List<K> list);
+
     K convertToEntity(T t);
-    List<K> convertAllToEntityList(List<T> list );
+
+    List<K> convertAllToEntityList(List<T> list);
 }

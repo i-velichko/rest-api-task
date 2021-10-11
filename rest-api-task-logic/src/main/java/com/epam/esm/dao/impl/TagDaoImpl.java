@@ -7,12 +7,11 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -77,12 +76,20 @@ public class TagDaoImpl implements BaseDao<Tag> {
     }
 
     public void createWithReference(Tag tag, long certificateId) {
-        Tag createdTag = create(tag);
-        jdbcTemplate.update(CREATE_NEW_TAG_REFERENCE_SQL, certificateId, createdTag.getId());
+        if (!ifPresent(tag.getName())) {
+            Optional<Tag> byName = findByName(tag.getName());
+            byName.ifPresent(optionalTag -> {
+                jdbcTemplate.update(CREATE_NEW_TAG_REFERENCE_SQL, certificateId, optionalTag.getId());
+            });
+        } else {
+            Tag createdTag = create(tag);
+            jdbcTemplate.update(CREATE_NEW_TAG_REFERENCE_SQL, certificateId, createdTag.getId());
+        }
+
     }
 
     public boolean ifPresent(String name) {
-
-        return jdbcTemplate.queryForObject(IF_TAG_PRESENT_SQL, new BeanPropertyRowMapper<>(Boolean.class), name);
+        String result = jdbcTemplate.queryForObject(IF_TAG_PRESENT_SQL, new BeanPropertyRowMapper<>(String.class), name);
+        return Objects.equals(result, "1");
     }
 }

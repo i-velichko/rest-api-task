@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-import static java.util.Objects.nonNull;
-
 /**
  * @author Ivan Velichko
  * @date 08.10.2021 10:51

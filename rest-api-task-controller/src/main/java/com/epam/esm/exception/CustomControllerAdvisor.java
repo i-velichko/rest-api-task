@@ -9,11 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
+import static com.epam.esm.exception.CustomErrorMessageCode.ENTITY_NOT_FOUND;
+import static com.epam.esm.exception.CustomErrorMessageCode.TAG_CAN_NOT_BE_REMOVED;
 
 /**
  * @author Ivan Velichko
@@ -22,9 +24,7 @@ import java.util.Optional;
 
 @ControllerAdvice
 public class CustomControllerAdvisor {
-    private ResourceBundleMessageSource resourceBundleMessageSource;
-    private static final String ENTITY_NOT_FOUND = "error.entity.not.found.";
-    private static final String TAG_CAN_NOT_BE_REMOVED = "error.tag.cant.remove";
+    private final ResourceBundleMessageSource resourceBundleMessageSource;
     private static final List<String> AVAILABLE_LOCALES = Arrays.asList("en_US", "ru_RU");
     private static final Locale DEFAULT_LOCALE = new Locale("en", "US");
 
@@ -34,16 +34,16 @@ public class CustomControllerAdvisor {
     }
 
     @ExceptionHandler(NoSuchEntityException.class)
-    public ResponseEntity<CustomResponse> handleNoSuchEntityException(NoSuchEntityException e) {
-        String message = String.format("%s %s", LocalDateTime.now(), e.getMessage());
-        CustomResponse response = new CustomResponse(message, 40401);
+    public ResponseEntity<CustomResponse> handleNoSuchEntityException(NoSuchEntityException e, Locale locale) {
+        String localeMsg = resolveResourceBundle(e.getMessage(), locale);
+        CustomResponse response = new CustomResponse(localeMsg, 40401);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DuplicateEntityException.class)
-    public ResponseEntity<CustomResponse> handleDuplicateEntityException(DuplicateEntityException e) {
-        String message = String.format("%s %s", LocalDateTime.now(), e.getMessage());
-        CustomResponse response = new CustomResponse(message, 40404);
+    public ResponseEntity<CustomResponse> handleDuplicateEntityException(DuplicateEntityException e, Locale locale) {
+        String localeMsg = resolveResourceBundle(e.getMessage(), locale);
+        CustomResponse response = new CustomResponse(localeMsg, 40404);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 

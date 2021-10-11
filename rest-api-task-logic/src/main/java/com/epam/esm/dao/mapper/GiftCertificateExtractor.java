@@ -2,6 +2,7 @@ package com.epam.esm.dao.mapper;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.ExtractCertificateDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -44,7 +45,7 @@ public class GiftCertificateExtractor implements ResultSetExtractor<List<GiftCer
         try {
             return giftCertificateMapper.mapRow(rs, 1);
         } catch (SQLException e) {
-            throw new RuntimeException(); //todo
+            throw new ExtractCertificateDataException();
         }
     }
 

@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.epam.esm.exception.CustomErrorMessageCode.CERTIFICATE_ALREADY_EXIST;
+import static com.epam.esm.exception.CustomErrorMessageCode.CERTIFICATE_NOT_FOUND;
+
 /**
  * @author Ivan Velichko
  * @date 04.10.2021 18:53
@@ -40,7 +43,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificate findById(long id) {
         Optional<GiftCertificate> byId = giftCertificateDao.findById(id);
-        return byId.orElseThrow(() -> new NoSuchEntityException("certificate not found"));
+        return byId.orElseThrow(() -> new NoSuchEntityException(CERTIFICATE_NOT_FOUND));
     }
 
     @Override
@@ -66,9 +69,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 tags.forEach(tag -> tagDao.createWithReference(tag, certificateId));
             }
         } else {
-            throw new DuplicateEntityException("can not create certificate");
+            throw new DuplicateEntityException(CERTIFICATE_ALREADY_EXIST);
         }
-
         return toCreate;
     }
 

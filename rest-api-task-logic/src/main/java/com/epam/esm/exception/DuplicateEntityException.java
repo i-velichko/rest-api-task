@@ -9,6 +9,7 @@ public class DuplicateEntityException extends RuntimeException {
     public DuplicateEntityException() {
     }
 
-    public DuplicateEntityException(String msg) {
+    public DuplicateEntityException(String message) {
+        super(message);
     }
 }

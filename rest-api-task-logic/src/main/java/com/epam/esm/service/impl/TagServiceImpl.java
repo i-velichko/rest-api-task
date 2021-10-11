@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.esm.exception.CustomErrorMessageCode.TAG_ALREADY_EXIST;
+import static com.epam.esm.exception.CustomErrorMessageCode.TAG_NOT_FOUND;
+
 /**
  * @author Ivan Velichko
  * @date 03.10.2021 15:50
@@ -36,13 +39,13 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag findById(long id) {
         Optional<Tag> byId = tagDao.findById(id);
-        return byId.orElseThrow(() -> new NoSuchEntityException("tag not found"));
+        return byId.orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
     }
 
     @Override
     public Tag findByName(String name) {
         Optional<Tag> byName = tagDao.findByName(name);
-        return byName.orElseThrow(() -> new NoSuchEntityException("tag not found"));
+        return byName.orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
     }
 
     @Override
@@ -52,7 +55,7 @@ public class TagServiceImpl implements TagService {
         if (!ifExist && tagDataValidator.isValid(tag)) {
             toCreate = tagDao.create(tag);
         } else {
-            throw new DuplicateEntityException("can not create tag");
+            throw new DuplicateEntityException(TAG_ALREADY_EXIST);
         }
         return toCreate;
     }

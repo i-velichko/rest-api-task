@@ -39,5 +39,6 @@ public class SpringConfig implements WebMvcConfigurer {
                 .json()
                 .modules(new JavaTimeModule()).build()
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        converters.add(new MappingJackson2HttpMessageConverter(objectMapper));    }
+        converters.add(new MappingJackson2HttpMessageConverter(objectMapper));
+    }
 }

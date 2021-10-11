@@ -97,10 +97,10 @@ class GiftCertificateServiceImplTest {
     @Test
     void createPositive() {
         GiftCertificate expectedCertificate = toTest.create(newCertificate);
-        assertEquals("certificate4",expectedCertificate.getName());
-        assertEquals("description4",expectedCertificate.getDescription());
-        assertEquals(BigDecimal.valueOf(10),expectedCertificate.getPrice());
-        assertEquals(10,expectedCertificate.getDuration());
+        assertEquals("certificate4", expectedCertificate.getName());
+        assertEquals("description4", expectedCertificate.getDescription());
+        assertEquals(BigDecimal.valueOf(10), expectedCertificate.getPrice());
+        assertEquals(10, expectedCertificate.getDuration());
     }
 
     @Test

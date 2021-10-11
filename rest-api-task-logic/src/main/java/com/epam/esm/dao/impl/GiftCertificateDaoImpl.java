@@ -2,27 +2,19 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.BaseDao;
 import com.epam.esm.dao.mapper.GiftCertificateExtractor;
-import com.epam.esm.dao.mapper.GiftCertificateMapper;
-import com.epam.esm.dao.qury.QueryBuilder;
+import com.epam.esm.dao.query.QueryBuilder;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.sql.Types.*;
 
 /**
  * @author Ivan Velichko

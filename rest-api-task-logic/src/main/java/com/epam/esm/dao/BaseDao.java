@@ -1,7 +1,6 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.BaseEntity;
-import com.epam.esm.entity.GiftCertificate;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +14,12 @@ public interface BaseDao<T extends BaseEntity> {
 
     List<T> findAll();
 
-    Optional <T> findById(long id);
+    Optional<T> findById(long id);
+
     Optional<T> findByName(String name);
+
     void update(T t);
+
     boolean delete(long id);
 
 }

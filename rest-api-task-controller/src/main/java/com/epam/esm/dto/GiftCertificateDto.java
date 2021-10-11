@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Ivan Velichko
  * @date 04.10.2021 18:50
  */
-public class GiftCertificateDto extends BaseDto{
+public class GiftCertificateDto extends BaseDto {
 
     private String name;
     private String description;

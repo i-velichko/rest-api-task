@@ -1,14 +1,10 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.converter.BaseEntityConverter;
 import com.epam.esm.converter.impl.TagConverter;
-import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +22,7 @@ public class TagController {
     private final TagService tagService;
 
     @Autowired
-    public TagController( TagConverter tagConverter, TagService tagService) {
+    public TagController(TagConverter tagConverter, TagService tagService) {
         this.tagConverter = tagConverter;
         this.tagService = tagService;
     }
