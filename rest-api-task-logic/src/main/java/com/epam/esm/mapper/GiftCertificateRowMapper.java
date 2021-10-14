@@ -1,4 +1,4 @@
-package com.epam.esm.dao.mapper;
+package com.epam.esm.mapper;
 
 import com.epam.esm.entity.GiftCertificate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 
 @Component
-public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
+public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
 
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {

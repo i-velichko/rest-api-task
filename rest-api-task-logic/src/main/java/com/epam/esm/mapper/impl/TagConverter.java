@@ -1,6 +1,6 @@
-package com.epam.esm.converter.impl;
+package com.epam.esm.mapper.impl;
 
-import com.epam.esm.converter.BaseEntityConverter;
+import com.epam.esm.mapper.BaseEntityConverter;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import org.springframework.stereotype.Component;
@@ -24,8 +24,7 @@ public class TagConverter implements BaseEntityConverter<Tag, TagDto> {
 
     @Override
     public TagDto convertToDto(Tag tag) {
-        return new TagDto(tag.getId(), tag.getName()
-        );
+        return new TagDto(tag.getId(), tag.getName());
     }
 
     @Override

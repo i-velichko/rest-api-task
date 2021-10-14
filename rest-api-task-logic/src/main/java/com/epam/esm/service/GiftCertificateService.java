@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DuplicateEntityException;
 
@@ -11,13 +12,13 @@ import java.util.Map;
  * @date 04.10.2021 18:53
  */
 public interface GiftCertificateService {
-    GiftCertificate findById(long id);
+    GiftCertificateDto findById(long id);
 
-    List<GiftCertificate> findAll();
+    List<GiftCertificateDto> findAll();
 
-    List<GiftCertificate> findAllByParam(Map<String, String> params);
+    List<GiftCertificateDto> findAllByParam(Map<String, String> params);
 
-    GiftCertificate create(GiftCertificate giftCertificate) throws DuplicateEntityException;
+    GiftCertificateDto create(GiftCertificateDto giftCertificateDto) throws DuplicateEntityException;
 
-    void update(GiftCertificate giftCertificate);
+    void update(GiftCertificateDto giftCertificateDto);
 }

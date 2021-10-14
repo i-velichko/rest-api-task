@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -30,7 +29,6 @@ public class TagDaoImpl implements BaseDao<Tag> {
     private static final String CREATE_NEW_TAG_REFERENCE_SQL =
             "INSERT INTO certificates_tags (certificate_id, tag_id) VALUES (?, ?);";
     private static final String DELETE_TAG_BY_ID_SQL = "DELETE FROM tag WHERE id =?";
-    private static final String IF_TAG_PRESENT_SQL = "SELECT 1 FROM tag WHERE name LIKE ?";
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -76,7 +74,7 @@ public class TagDaoImpl implements BaseDao<Tag> {
     }
 
     public void createWithReference(Tag tag, long certificateId) {
-        if (!ifPresent(tag.getName())) {
+        if (findByName(tag.getName()).isPresent()) { //todo refactoring
             Optional<Tag> byName = findByName(tag.getName());
             byName.ifPresent(optionalTag -> {
                 jdbcTemplate.update(CREATE_NEW_TAG_REFERENCE_SQL, certificateId, optionalTag.getId());
@@ -88,8 +86,4 @@ public class TagDaoImpl implements BaseDao<Tag> {
 
     }
 
-    public boolean ifPresent(String name) {
-        String result = jdbcTemplate.queryForObject(IF_TAG_PRESENT_SQL, new BeanPropertyRowMapper<>(String.class), name);
-        return Objects.equals(result, "1");
-    }
 }

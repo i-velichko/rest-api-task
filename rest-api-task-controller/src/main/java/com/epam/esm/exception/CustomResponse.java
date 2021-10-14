@@ -5,8 +5,8 @@ package com.epam.esm.exception;
  * @date 04.10.2021 11:07
  */
 public class CustomResponse {
-    private String message;
-    private int errorCode;
+    private final String message;
+    private final int errorCode;
 
     public CustomResponse(String message, int errorCode) {
         this.message = message;
@@ -20,4 +20,5 @@ public class CustomResponse {
     public int getErrorCode() {
         return errorCode;
     }
+
 }

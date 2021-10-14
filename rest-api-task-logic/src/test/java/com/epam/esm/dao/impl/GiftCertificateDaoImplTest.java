@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.config.TestConfig;
+import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GiftCertificateDaoImplTest {
     private static final int EXPECTED_FILTER_CERTIFICATES_LIST_SIZE_WHEN_PARAMS_NOT_EXIST = 0;
     private final GiftCertificateDaoImpl toTest;
-    private static GiftCertificate giftCertificate;
-    private static Map<String, String> filterParams;
+    private GiftCertificate giftCertificate;
+    private Map<String, String> filterParams;
 
     private static final long CERTIFICATE_ID = 1L;
     private static final long NOT_EXIST_ID = 5L;

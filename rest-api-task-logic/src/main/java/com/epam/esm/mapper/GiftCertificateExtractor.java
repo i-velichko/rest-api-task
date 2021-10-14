@@ -1,4 +1,4 @@
-package com.epam.esm.dao.mapper;
+package com.epam.esm.mapper;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
@@ -22,11 +22,11 @@ import java.util.Map;
 
 @Component
 public class GiftCertificateExtractor implements ResultSetExtractor<List<GiftCertificate>> {
-    private final GiftCertificateMapper giftCertificateMapper;
+    private final GiftCertificateRowMapper giftCertificateRowMapper;
 
     @Autowired
-    public GiftCertificateExtractor(GiftCertificateMapper giftCertificateMapper) {
-        this.giftCertificateMapper = giftCertificateMapper;
+    public GiftCertificateExtractor(GiftCertificateRowMapper giftCertificateRowMapper) {
+        this.giftCertificateRowMapper = giftCertificateRowMapper;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class GiftCertificateExtractor implements ResultSetExtractor<List<GiftCer
 
     private GiftCertificate mapRow(ResultSet rs) {
         try {
-            return giftCertificateMapper.mapRow(rs, 1);
+            return giftCertificateRowMapper.mapRow(rs, 1);
         } catch (SQLException e) {
             throw new ExtractCertificateDataException();
         }

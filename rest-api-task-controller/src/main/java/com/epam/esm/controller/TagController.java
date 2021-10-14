@@ -1,13 +1,12 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.converter.impl.TagConverter;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -18,41 +17,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/tags")
 public class TagController {
-    private final TagConverter tagConverter;
     private final TagService tagService;
 
     @Autowired
-    public TagController(TagConverter tagConverter, TagService tagService) {
-        this.tagConverter = tagConverter;
+    public TagController(TagService tagService) {
         this.tagService = tagService;
     }
 
     @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public TagDto findTagById(@PathVariable("id") long id) {
-        Tag tag = tagService.findById(id);
-        return tagConverter.convertToDto(tag);
+        return tagService.findById(id);
     }
 
     @GetMapping(params = "name")
+    @ResponseStatus(HttpStatus.OK)
     public TagDto findTagByName(@RequestParam(value = "name") String name) {
-        Tag tag = tagService.findByName(name);
-        return tagConverter.convertToDto(tag);
+        return tagService.findByName(name);
     }
 
     @GetMapping
-    public List<TagDto> showAll() {
-        List<Tag> tags = tagService.findAll();
-        return tagConverter.convertAllToDtoList(tags);
+    @ResponseStatus(HttpStatus.OK)
+    public List<TagDto> findAll() {
+        return tagService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Tag create(@RequestBody TagDto tagDto) {
-        Tag tag = tagConverter.convertToEntity(tagDto);
-        return tagService.create(tag);
+    public TagDto create(@RequestBody @Valid TagDto tagDto) {
+        return tagService.create(tagDto);
     }
 
     @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteById(@PathVariable("id") long id) {
         return tagService.delete(id);
     }

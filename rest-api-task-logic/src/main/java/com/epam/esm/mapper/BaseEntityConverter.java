@@ -1,4 +1,4 @@
-package com.epam.esm.converter;
+package com.epam.esm.mapper;
 
 import com.epam.esm.dto.BaseDto;
 import com.epam.esm.entity.BaseEntity;

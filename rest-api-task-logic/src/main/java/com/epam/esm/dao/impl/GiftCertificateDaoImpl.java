@@ -1,7 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.BaseDao;
-import com.epam.esm.dao.mapper.GiftCertificateExtractor;
+import com.epam.esm.mapper.GiftCertificateExtractor;
 import com.epam.esm.dao.query.QueryBuilder;
 import com.epam.esm.entity.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;

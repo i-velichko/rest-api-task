@@ -15,6 +15,8 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <spring.version>5.3.10</spring.version>
+        <hibernate.version>6.1.0.Final</hibernate.version>
+        <modelmapper.version>2.4.4</modelmapper.version>
         <org.postgresql.version>42.2.24</org.postgresql.version>
         <org.slf4j.version>1.7.30</org.slf4j.version>
         <org.mockito.version>4.0.0</org.mockito.version>
@@ -40,6 +42,16 @@
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

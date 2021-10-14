@@ -6,13 +6,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 import static com.epam.esm.exception.CustomErrorMessageCode.ENTITY_NOT_FOUND;
 import static com.epam.esm.exception.CustomErrorMessageCode.TAG_CAN_NOT_BE_REMOVED;
@@ -63,6 +63,13 @@ public class CustomControllerAdvisor {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<CustomValidationResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, Locale locale) {
+        BindingResult bindingResult = e.getBindingResult();
+        List<String> errors = getLocaleErrorMessages(bindingResult, locale);
+        CustomValidationResponse response = new CustomValidationResponse(errors, 40405);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
     private String getEntityNameByMsg(Exception e, String beforeName, String afterName) {
         String text = msgFromStack(e, afterName);
@@ -75,6 +82,18 @@ public class CustomControllerAdvisor {
                 .filter(className -> className.contains(afterName))
                 .findAny();
         return dao.get();
+    }
+
+    private List<String> getLocaleErrorMessages(BindingResult bindingResult, Locale locale) {
+        List<String> errors = new ArrayList<>();
+        if (bindingResult.hasErrors()) {
+            List<FieldError> errorList = bindingResult.getFieldErrors();
+            for (FieldError error : errorList) {
+                String localeMsg = resolveResourceBundle(error.getDefaultMessage(), locale);
+                errors.add(localeMsg);
+            }
+        }
+        return errors;
     }
 
     private String resolveResourceBundle(String key, Locale locale) {

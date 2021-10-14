@@ -1,10 +1,18 @@
 package com.epam.esm.dto;
 
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import static com.epam.esm.exception.CustomErrorMessageCode.TAG_NAME_INCORRECT;
+
 /**
  * @author Ivan Velichko
  * @date 03.10.2021 15:42
  */
 public class TagDto extends BaseDto {
+    @NotBlank(message = TAG_NAME_INCORRECT)
+    @Size(min = 1, max = 30, message = TAG_NAME_INCORRECT)
     private String name;
 
     public TagDto() {

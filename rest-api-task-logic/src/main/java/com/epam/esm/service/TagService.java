@@ -1,6 +1,8 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -9,13 +11,13 @@ import java.util.List;
  * @date 03.10.2021 15:48
  */
 public interface TagService {
-    List<Tag> findAll();
+    List<TagDto> findAll();
 
-    Tag findById(long id);
+    TagDto findById(long id);
 
-    Tag findByName(String name);
+    TagDto findByName(String name);
 
-    Tag create(Tag tag);
+    TagDto create(TagDto tagDto);
 
     boolean delete(long id);
 }
