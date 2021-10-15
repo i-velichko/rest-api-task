@@ -6,15 +6,18 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.mapper.GiftCertificateExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.epam.esm.mapper.ParamName.QUERY;
 
 /**
  * @author Ivan Velichko
@@ -24,6 +27,7 @@ import java.util.Optional;
 @Repository
 public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final GiftCertificateExtractor giftCertificateExtractor;
     private final QueryBuilder queryBuilder;
 
@@ -38,11 +42,12 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     private static final String UPDATE_GIFT_CERTIFICATE_SQL = "UPDATE gift_certificate SET name = ?, description = ?, " +
             "price = ?, last_update_date=NOW(), duration = ? WHERE id = ?";
     private static final String CREATE_NEW_CERTIFICATE_SQL = "INSERT INTO gift_certificate " +
-            "(name, description, price, duration) VALUES (?, ?, ?, ?)";
+            "(name, description, price, duration) VALUES (:name, :description, :price, :duration)";
 
     @Autowired
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateExtractor giftCertificateExtractor, QueryBuilder queryBuilder) {
+    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, GiftCertificateExtractor giftCertificateExtractor, QueryBuilder queryBuilder) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.giftCertificateExtractor = giftCertificateExtractor;
         this.queryBuilder = queryBuilder;
     }
@@ -50,15 +55,9 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement statement = con.prepareStatement(CREATE_NEW_CERTIFICATE_SQL, new String[]{"id"});
-            statement.setString(1, giftCertificate.getName());
-            statement.setString(2, giftCertificate.getDescription());
-            statement.setBigDecimal(3, giftCertificate.getPrice());
-            statement.setInt(4, giftCertificate.getDuration());
-            return statement;
-        }, keyHolder);
-        giftCertificate.setId(keyHolder.getKey().longValue());
+        namedParameterJdbcTemplate.update(CREATE_NEW_CERTIFICATE_SQL,
+                new BeanPropertySqlParameterSource(giftCertificate), keyHolder, new String[]{"id"});
+        giftCertificate.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return giftCertificate;
     }
 
@@ -79,21 +78,12 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-        jdbcTemplate.update(con -> {
-            PreparedStatement statement = con.prepareStatement(UPDATE_GIFT_CERTIFICATE_SQL,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            statement.setString(1, giftCertificate.getName());
-            statement.setString(2, giftCertificate.getDescription());
-            statement.setBigDecimal(3, giftCertificate.getPrice());
-            statement.setInt(4, giftCertificate.getDuration());
-            statement.setLong(5, giftCertificate.getId());
-            return statement;
-        });
+        namedParameterJdbcTemplate.update(CREATE_NEW_CERTIFICATE_SQL, new BeanPropertySqlParameterSource(giftCertificate));
         return giftCertificate;
     }
 
     public List<GiftCertificate> findAllBy(Map<String, String> params) {
-        params.put("query", FIND_ALL_CERTIFICATES_WITH_TAGS_SQL);
+        params.put(QUERY, FIND_ALL_CERTIFICATES_WITH_TAGS_SQL);
         String sqlQuery = queryBuilder.buildQueryForSearch(params);
         return jdbcTemplate.query(sqlQuery, giftCertificateExtractor);
     }
