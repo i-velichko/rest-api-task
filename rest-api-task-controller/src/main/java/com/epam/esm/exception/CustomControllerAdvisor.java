@@ -59,21 +59,21 @@ public class CustomControllerAdvisor {
         String msg = getEntityNameByMsg(e, ".", "Dao").toLowerCase(Locale.ROOT);
         String localeMsg = i18nManager.getMessage(ENTITY_NOT_FOUND + msg, locale);
         CustomResponse response = new CustomResponse(localeMsg, EMPTY_RESULT_DATA_ACCESS_CODE);
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<CustomResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e, Locale locale) {
         String localeMsg = i18nManager.getMessage(TAG_CAN_NOT_BE_REMOVED, locale);
         CustomResponse response = new CustomResponse(localeMsg, DATA_INTEGRITY_VIOLATION_CODE);
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DuplicateEntityException.class)
     public ResponseEntity<CustomResponse> handleDuplicateEntityException(DuplicateEntityException e, Locale locale) {
         String localeMsg = i18nManager.getMessage(e.getMessage(), locale);
         CustomResponse response = new CustomResponse(localeMsg, DUPLICATE_ENTITY_CODE);
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -81,7 +81,7 @@ public class CustomControllerAdvisor {
         BindingResult bindingResult = e.getBindingResult();
         List<String> errors = i18nManager.getLocaleValidationErrorMessages(bindingResult, locale);
         CustomValidationResponse response = new CustomValidationResponse(errors, METHOD_ARGUMENT_NOT_VALID_CODE);
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     private String getEntityNameByMsg(Exception e, String beforeName, String afterName) {
