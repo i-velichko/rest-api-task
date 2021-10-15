@@ -15,6 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.epam.esm.mapper.ParamName.*;
+
 /**
  * @author Ivan Velichko
  * @date 07.10.2021 11:24
@@ -33,9 +35,9 @@ public class GiftCertificateExtractor implements ResultSetExtractor<List<GiftCer
     public List<GiftCertificate> extractData(ResultSet rs) throws SQLException, DataAccessException {
         Map<Long, GiftCertificate> certificateMap = new LinkedHashMap<>();
         while (rs.next()) {
-            long id = rs.getLong("id");
+            long id = rs.getLong(ID);
             GiftCertificate giftCertificate = certificateMap.computeIfAbsent(id, cId -> mapRow(rs));
-            Tag tag = new Tag(rs.getInt("tag_id"), rs.getString("tag_name"));
+            Tag tag = new Tag(rs.getInt(TAG_ID), rs.getString(TAG_NAME));
             giftCertificate.getTags().add(tag);
         }
         return new ArrayList<>(certificateMap.values());

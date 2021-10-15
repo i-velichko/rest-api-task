@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.epam.esm.mapper.ParamName.*;
+
 /**
  * @author Ivan Velichko
  * @date 06.10.2021 20:47
@@ -18,14 +20,14 @@ public class GiftCertificateRowMapper implements RowMapper<GiftCertificate> {
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
         GiftCertificate giftCertificate = new GiftCertificate();
-        giftCertificate.setId(rs.getInt("id"));
-        giftCertificate.setName(rs.getString("name"));
-        giftCertificate.setDescription(rs.getString("description"));
-        giftCertificate.setPrice(rs.getBigDecimal("price"));
-        giftCertificate.setCreateDate(rs.getTimestamp("create_date").toLocalDateTime());
+        giftCertificate.setId(rs.getInt(ID));
+        giftCertificate.setName(rs.getString(NAME));
+        giftCertificate.setDescription(rs.getString(DESCRIPTION));
+        giftCertificate.setPrice(rs.getBigDecimal(PRICE));
+        giftCertificate.setCreateDate(rs.getTimestamp(CREATE_DATE).toLocalDateTime());
         giftCertificate.setLastUpdateDate(rs.getTimestamp(
-                "last_update_date").toLocalDateTime());
-        giftCertificate.setDuration(rs.getInt("duration"));
+                LAST_UPDATE_DATE).toLocalDateTime());
+        giftCertificate.setDuration(rs.getInt(DURATION));
         return giftCertificate;
     }
 }
