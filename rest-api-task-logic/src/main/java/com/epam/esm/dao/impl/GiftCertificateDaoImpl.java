@@ -1,9 +1,9 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.BaseDao;
-import com.epam.esm.mapper.GiftCertificateExtractor;
 import com.epam.esm.dao.query.QueryBuilder;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.mapper.GiftCertificateExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -78,19 +78,18 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     }
 
     @Override
-    public void update(GiftCertificate giftCertificate) {
+    public GiftCertificate update(GiftCertificate giftCertificate) {
         jdbcTemplate.update(con -> {
-                    PreparedStatement statement = con.prepareStatement(UPDATE_GIFT_CERTIFICATE_SQL,
-                            ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    statement.setString(1, giftCertificate.getName());
-                    statement.setString(2, giftCertificate.getDescription());
-                    statement.setBigDecimal(3, giftCertificate.getPrice());
-                    statement.setInt(4, giftCertificate.getDuration());
-                    statement.setLong(5, giftCertificate.getId());
-                    return statement;
-                }
-        );
-
+            PreparedStatement statement = con.prepareStatement(UPDATE_GIFT_CERTIFICATE_SQL,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setString(1, giftCertificate.getName());
+            statement.setString(2, giftCertificate.getDescription());
+            statement.setBigDecimal(3, giftCertificate.getPrice());
+            statement.setInt(4, giftCertificate.getDuration());
+            statement.setLong(5, giftCertificate.getId());
+            return statement;
+        });
+        return giftCertificate;
     }
 
     public List<GiftCertificate> findAllByParam(Map<String, String> params) {

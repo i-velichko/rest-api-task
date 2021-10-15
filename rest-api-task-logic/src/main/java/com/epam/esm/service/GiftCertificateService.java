@@ -1,7 +1,6 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.GiftCertificateDto;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DuplicateEntityException;
 
 import java.util.List;
@@ -20,5 +19,5 @@ public interface GiftCertificateService {
 
     GiftCertificateDto create(GiftCertificateDto giftCertificateDto) throws DuplicateEntityException;
 
-    void update(GiftCertificateDto giftCertificateDto);
+    GiftCertificateDto update(GiftCertificateDto giftCertificateDto);
 }

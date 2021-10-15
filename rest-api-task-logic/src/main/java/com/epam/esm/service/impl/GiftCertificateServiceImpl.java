@@ -79,15 +79,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public void update(GiftCertificateDto giftCertificateDto) {
+    public GiftCertificateDto update(GiftCertificateDto giftCertificateDto) {
+        GiftCertificate updatedCertificate = new GiftCertificate();
         if (giftCertificateDto != null) {
             GiftCertificate newGiftCertificate = certificateMapper.toEntity(giftCertificateDto);
             GiftCertificate previousCertificate = certificateMapper.toEntity(findById(giftCertificateDto.getId()));
             GiftCertificateMerger.merge(newGiftCertificate, previousCertificate);
-            giftCertificateDao.update(previousCertificate);
+            updatedCertificate = giftCertificateDao.update(previousCertificate);
             previousCertificate.getTags()
                     .stream().filter(tag -> tagDao.findByName(tag.getName()).isEmpty())
                     .forEach(tag -> tagDao.createWithReference(tag, previousCertificate.getId()));
         }
+        return certificateMapper.toDto(updatedCertificate);
     }
 }

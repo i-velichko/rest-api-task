@@ -18,7 +18,7 @@ public interface BaseDao<T extends BaseEntity> {
 
     Optional<T> findByName(String name);
 
-    void update(T t);
+    T update(T t);
 
     boolean delete(long id);
 

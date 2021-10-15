@@ -64,7 +64,7 @@ public class TagDaoImpl implements BaseDao<Tag> {
     }
 
     @Override
-    public void update(Tag tag) {
+    public Tag update(Tag tag) {
         throw new UnsupportedOperationException("Operation is not supported");
     }
 
