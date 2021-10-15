@@ -7,12 +7,10 @@ import com.epam.esm.exception.DuplicateEntityException;
 import com.epam.esm.exception.NoSuchEntityException;
 import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.service.TagService;
-import com.epam.esm.validator.impl.TagDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.epam.esm.exception.CustomErrorMessageCode.TAG_ALREADY_EXIST;
@@ -36,19 +34,24 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> findAll() {
-        return tagDao.findAll().stream().map(tagMapper::toDto).collect(Collectors.toList());
+        return tagDao.findAll()
+                .stream()
+                .map(tagMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public TagDto findById(long id) {
-        Optional<Tag> optionalTag = tagDao.findById(id);
-        return optionalTag.map(tagMapper::toDto).orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
+        return tagDao.findById(id)
+                .map(tagMapper::toDto)
+                .orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
     }
 
     @Override
     public TagDto findByName(String name) {
-        Optional<Tag> optionalTag = tagDao.findByName(name);
-        return optionalTag.map(tagMapper::toDto).orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
+        return tagDao.findByName(name)
+                .map(tagMapper::toDto)
+                .orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
     }
 
     @Override

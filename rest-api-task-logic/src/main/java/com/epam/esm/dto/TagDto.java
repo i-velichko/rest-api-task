@@ -50,11 +50,4 @@ public class TagDto extends BaseDto {
         return getName() != null ? getName().hashCode() : 0;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("TagDto{");
-        sb.append("name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

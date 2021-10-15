@@ -44,18 +44,25 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateDto findById(long id) {
         Optional<GiftCertificate> optionalGiftCertificate = giftCertificateDao.findById(id);
-        return optionalGiftCertificate.map(certificateMapper::toDto)
+        return optionalGiftCertificate
+                .map(certificateMapper::toDto)
                 .orElseThrow(() -> new NoSuchEntityException(CERTIFICATE_NOT_FOUND));
     }
 
     @Override
     public List<GiftCertificateDto> findAll() {
-        return giftCertificateDao.findAll().stream().map(certificateMapper::toDto).collect(Collectors.toList());
+        return giftCertificateDao.findAll()
+                .stream()
+                .map(certificateMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<GiftCertificateDto> findAllByParam(Map<String, String> params) {
-        return giftCertificateDao.findAllByParam(params).stream().map(certificateMapper::toDto).collect(Collectors.toList());
+        return giftCertificateDao.findAllByParam(params)
+                .stream()
+                .map(certificateMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -87,7 +94,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             GiftCertificateMerger.merge(newGiftCertificate, previousCertificate);
             updatedCertificate = giftCertificateDao.update(previousCertificate);
             previousCertificate.getTags()
-                    .stream().filter(tag -> tagDao.findByName(tag.getName()).isEmpty())
+                    .stream()
+                    .filter(tag -> tagDao.findByName(tag.getName()).isEmpty())
                     .forEach(tag -> tagDao.createWithReference(tag, previousCertificate.getId()));
         }
         return certificateMapper.toDto(updatedCertificate);

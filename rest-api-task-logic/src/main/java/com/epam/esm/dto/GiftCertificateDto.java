@@ -42,18 +42,6 @@ public class GiftCertificateDto extends BaseDto {
     public GiftCertificateDto() {
     }
 
-    public GiftCertificateDto(long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, int duration, Set<TagDto> tags) {
-        super(id);
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.createDate = createDate;
-        this.lastUpdateDate = lastUpdateDate;
-        this.duration = duration;
-        this.tags = tags;
-
-    }
-
     public String getName() {
         return name;
     }
@@ -111,16 +99,46 @@ public class GiftCertificateDto extends BaseDto {
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("GiftCertificateDto{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", price=").append(price);
-        sb.append(", create_date=").append(createDate);
-        sb.append(", last_update_date=").append(lastUpdateDate);
-        sb.append(", duration=").append(duration);
-        sb.append(", tags=").append(tags);
-        sb.append('}');
-        return sb.toString();
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        GiftCertificateDto that = (GiftCertificateDto) o;
+
+        if (getDuration() != that.getDuration()) {
+            return false;
+        }
+        if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+            return false;
+        }
+        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+            return false;
+        }
+        if (getPrice() != null ? !getPrice().equals(that.getPrice()) : that.getPrice() != null) {
+            return false;
+        }
+        if (getCreateDate() != null ? !getCreateDate().equals(that.getCreateDate()) : that.getCreateDate() != null) {
+            return false;
+        }
+        if (getLastUpdateDate() != null ? !getLastUpdateDate().equals(that.getLastUpdateDate()) : that.getLastUpdateDate() != null) {
+            return false;
+        }
+        return getTags() != null ? getTags().equals(that.getTags()) : that.getTags() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getName() != null ? getName().hashCode() : 0;
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
+        result = 31 * result + (getCreateDate() != null ? getCreateDate().hashCode() : 0);
+        result = 31 * result + (getLastUpdateDate() != null ? getLastUpdateDate().hashCode() : 0);
+        result = 31 * result + getDuration();
+        result = 31 * result + (getTags() != null ? getTags().hashCode() : 0);
+        return result;
     }
 }

@@ -130,17 +130,4 @@ public class GiftCertificate extends BaseEntity {
         return result;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("GiftCertificate{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", price=").append(price);
-        sb.append(", create_date=").append(createDate);
-        sb.append(", last_update_date=").append(lastUpdateDate);
-        sb.append(", duration=").append(duration);
-        sb.append(", tags=").append(tags);
-        sb.append('}');
-        return sb.toString();
-    }
 }
