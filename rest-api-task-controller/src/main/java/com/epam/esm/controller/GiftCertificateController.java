@@ -30,7 +30,7 @@ public class GiftCertificateController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GiftCertificateDto findCertificateById(@PathVariable("id") long id) {
-        return giftCertificateService.findById(id);
+        return giftCertificateService.findBy(id);
     }
 
     @GetMapping()
@@ -40,7 +40,6 @@ public class GiftCertificateController {
             @RequestParam(required = false, name = "search") String search,
             @RequestParam(required = false, name = "sort") String sort,
             @RequestParam(required = false, name = "order", defaultValue = "ASC") String order) {
-
         if (ObjectUtils.allNotNull(tag, search, sort, order)) {
             return giftCertificateService.findAll();
         } else {
@@ -49,7 +48,7 @@ public class GiftCertificateController {
             params.put("search", search);
             params.put("sort", sort);
             params.put("order", order);
-            return giftCertificateService.findAllByParam(params);
+            return giftCertificateService.findAllBy(params);
         }
     }
 

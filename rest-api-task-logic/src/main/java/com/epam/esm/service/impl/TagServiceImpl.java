@@ -41,15 +41,15 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto findById(long id) {
-        return tagDao.findById(id)
+    public TagDto findBy(long id) {
+        return tagDao.findBy(id)
                 .map(tagMapper::toDto)
                 .orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
     }
 
     @Override
-    public TagDto findByName(String name) {
-        return tagDao.findByName(name)
+    public TagDto findBy(String name) {
+        return tagDao.findBy(name)
                 .map(tagMapper::toDto)
                 .orElseThrow(() -> new NoSuchEntityException(TAG_NOT_FOUND));
     }
@@ -57,7 +57,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDto create(TagDto tagDto) {
         Tag tag = tagMapper.toEntity(tagDto);
-        boolean ifExist = tagDao.findByName(tag.getName()).isPresent();
+        boolean ifExist = tagDao.findBy(tag.getName()).isPresent();
         if (!ifExist) {
             return tagMapper.toDto(tagDao.create(tag));
         } else {

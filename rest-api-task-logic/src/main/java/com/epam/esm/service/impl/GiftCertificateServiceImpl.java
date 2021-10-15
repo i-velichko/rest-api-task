@@ -42,8 +42,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificateDto findById(long id) {
-        Optional<GiftCertificate> optionalGiftCertificate = giftCertificateDao.findById(id);
+    public GiftCertificateDto findBy(long id) {
+        Optional<GiftCertificate> optionalGiftCertificate = giftCertificateDao.findBy(id);
         return optionalGiftCertificate
                 .map(certificateMapper::toDto)
                 .orElseThrow(() -> new NoSuchEntityException(CERTIFICATE_NOT_FOUND));
@@ -58,8 +58,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDto> findAllByParam(Map<String, String> params) {
-        return giftCertificateDao.findAllByParam(params)
+    public List<GiftCertificateDto> findAllBy(Map<String, String> params) {
+        return giftCertificateDao.findAllBy(params)
                 .stream()
                 .map(certificateMapper::toDto)
                 .collect(Collectors.toList());
@@ -70,7 +70,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDto create(GiftCertificateDto giftCertificateDto) {
         GiftCertificate newGiftCertificate;
         GiftCertificate giftCertificate = certificateMapper.toEntity(giftCertificateDto);
-        boolean ifExist = giftCertificateDao.findById(giftCertificate.getId()).isPresent();
+        boolean ifExist = giftCertificateDao.findBy(giftCertificate.getId()).isPresent();
         if (!ifExist) {
             newGiftCertificate = giftCertificateDao.create(giftCertificate);
             long certificateId = giftCertificate.getId();
@@ -90,12 +90,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate updatedCertificate = new GiftCertificate();
         if (giftCertificateDto != null) {
             GiftCertificate newGiftCertificate = certificateMapper.toEntity(giftCertificateDto);
-            GiftCertificate previousCertificate = certificateMapper.toEntity(findById(giftCertificateDto.getId()));
+            GiftCertificate previousCertificate = certificateMapper.toEntity(findBy(giftCertificateDto.getId()));
             GiftCertificateMerger.merge(newGiftCertificate, previousCertificate);
             updatedCertificate = giftCertificateDao.update(previousCertificate);
             previousCertificate.getTags()
                     .stream()
-                    .filter(tag -> tagDao.findByName(tag.getName()).isEmpty())
+                    .filter(tag -> tagDao.findBy(tag.getName()).isEmpty())
                     .forEach(tag -> tagDao.createWithReference(tag, previousCertificate.getId()));
         }
         return certificateMapper.toDto(updatedCertificate);

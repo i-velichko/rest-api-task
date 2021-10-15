@@ -27,13 +27,13 @@ public class TagController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TagDto findTagById(@PathVariable("id") long id) {
-        return tagService.findById(id);
+        return tagService.findBy(id);
     }
 
     @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public TagDto findTagByName(@RequestParam(value = "name") String name) {
-        return tagService.findByName(name);
+        return tagService.findBy(name);
     }
 
     @GetMapping

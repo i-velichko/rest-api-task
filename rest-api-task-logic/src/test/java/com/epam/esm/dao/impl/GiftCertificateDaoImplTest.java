@@ -1,7 +1,6 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.config.TestConfig;
-import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,39 +68,39 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void findByIdPositive() {
-        Optional<GiftCertificate> actual = toTest.findById(CERTIFICATE_ID);
+        Optional<GiftCertificate> actual = toTest.findBy(CERTIFICATE_ID);
         assertTrue(actual.isPresent());
     }
 
     @Test
     void findByIdNegativeWhenIdNotExist() {
-        Optional<GiftCertificate> actual = toTest.findById(NOT_EXIST_ID);
+        Optional<GiftCertificate> actual = toTest.findBy(NOT_EXIST_ID);
         assertTrue(actual.isEmpty());
     }
 
     @Test
     void findByNamePositive() {
-        Optional<GiftCertificate> actual = toTest.findByName(NEW_NAME);
+        Optional<GiftCertificate> actual = toTest.findBy(NEW_NAME);
         assertTrue(actual.isPresent());
     }
 
     @Test
     void findByNameNegativeWhenNameNotPresent() {
-        Optional<GiftCertificate> actual = toTest.findByName(NOT_EXIST_NAME);
+        Optional<GiftCertificate> actual = toTest.findBy(NOT_EXIST_NAME);
         assertTrue(actual.isEmpty());
     }
 
 
     @Test
     void findAllByParamPositive() {
-        int actualSize = toTest.findAllByParam(filterParams).size();
+        int actualSize = toTest.findAllBy(filterParams).size();
         assertEquals(EXPECTED_FILTER_CERTIFICATES_LIST_SIZE, actualSize);
     }
 
     @Test
     void findAllByParamPositiveNegative() {
         filterParams.put("tag", "IBA");
-        int actualSize = toTest.findAllByParam(filterParams).size();
+        int actualSize = toTest.findAllBy(filterParams).size();
         assertEquals(EXPECTED_FILTER_CERTIFICATES_LIST_SIZE_WHEN_PARAMS_NOT_EXIST, actualSize);
     }
 

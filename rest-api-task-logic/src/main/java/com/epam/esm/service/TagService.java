@@ -13,9 +13,9 @@ import java.util.List;
 public interface TagService {
     List<TagDto> findAll();
 
-    TagDto findById(long id);
+    TagDto findBy(long id);
 
-    TagDto findByName(String name);
+    TagDto findBy(String name);
 
     TagDto create(TagDto tagDto);
 

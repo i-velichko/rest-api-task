@@ -54,12 +54,12 @@ public class TagDaoImpl implements BaseDao<Tag> {
     }
 
     @Override
-    public Optional<Tag> findById(long id) {
+    public Optional<Tag> findBy(long id) {
         return jdbcTemplate.query(FIND_TAG_BY_ID_SQL, new BeanPropertyRowMapper<>(Tag.class), id).stream().findAny();
     }
 
     @Override
-    public Optional<Tag> findByName(String name) {
+    public Optional<Tag> findBy(String name) {
         return jdbcTemplate.query(FIND_TAG_BY_NAME_SQL, new BeanPropertyRowMapper<>(Tag.class), name).stream().findAny();
     }
 
@@ -74,8 +74,8 @@ public class TagDaoImpl implements BaseDao<Tag> {
     }
 
     public void createWithReference(Tag tag, long certificateId) {
-        if (findByName(tag.getName()).isPresent()) { //todo refactoring
-            Optional<Tag> byName = findByName(tag.getName());
+        if (findBy(tag.getName()).isPresent()) { //todo refactoring
+            Optional<Tag> byName = findBy(tag.getName());
             byName.ifPresent(optionalTag -> {
                 jdbcTemplate.update(CREATE_NEW_TAG_REFERENCE_SQL, certificateId, optionalTag.getId());
             });

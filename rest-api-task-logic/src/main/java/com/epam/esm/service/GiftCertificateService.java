@@ -11,11 +11,11 @@ import java.util.Map;
  * @date 04.10.2021 18:53
  */
 public interface GiftCertificateService {
-    GiftCertificateDto findById(long id);
+    GiftCertificateDto findBy(long id);
 
     List<GiftCertificateDto> findAll();
 
-    List<GiftCertificateDto> findAllByParam(Map<String, String> params);
+    List<GiftCertificateDto> findAllBy(Map<String, String> params);
 
     GiftCertificateDto create(GiftCertificateDto giftCertificateDto) throws DuplicateEntityException;
 

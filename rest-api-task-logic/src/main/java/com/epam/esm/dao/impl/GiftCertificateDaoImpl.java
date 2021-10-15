@@ -68,12 +68,12 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     }
 
     @Override
-    public Optional<GiftCertificate> findById(long id) {
+    public Optional<GiftCertificate> findBy(long id) {
         return jdbcTemplate.query(FIND_CERTIFICATE_BY_ID_SQL, giftCertificateExtractor, id).stream().findAny();
     }
 
     @Override
-    public Optional<GiftCertificate> findByName(String name) {
+    public Optional<GiftCertificate> findBy(String name) {
         return jdbcTemplate.query(FIND_CERTIFICATE_BY_NAME_SQL, giftCertificateExtractor, name).stream().findAny();
     }
 
@@ -92,7 +92,7 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
         return giftCertificate;
     }
 
-    public List<GiftCertificate> findAllByParam(Map<String, String> params) {
+    public List<GiftCertificate> findAllBy(Map<String, String> params) {
         params.put("query", FIND_ALL_CERTIFICATES_WITH_TAGS_SQL);
         String sqlQuery = queryBuilder.buildQueryForSearch(params);
         return jdbcTemplate.query(sqlQuery, giftCertificateExtractor);

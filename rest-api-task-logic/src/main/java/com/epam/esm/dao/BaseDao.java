@@ -14,9 +14,9 @@ public interface BaseDao<T extends BaseEntity> {
 
     List<T> findAll();
 
-    Optional<T> findById(long id);
+    Optional<T> findBy(long id);
 
-    Optional<T> findByName(String name);
+    Optional<T> findBy(String name);
 
     T update(T t);
 
