@@ -20,4 +20,6 @@ public interface GiftCertificateService {
     GiftCertificateDto create(GiftCertificateDto giftCertificateDto) throws DuplicateEntityException;
 
     GiftCertificateDto update(GiftCertificateDto giftCertificateDto);
+
+    public void delete(long id);
 }

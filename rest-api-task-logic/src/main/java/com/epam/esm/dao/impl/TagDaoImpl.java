@@ -69,8 +69,8 @@ public class TagDaoImpl implements BaseDao<Tag> {
     }
 
     @Override
-    public boolean delete(long id) {
-        return jdbcTemplate.update(DELETE_TAG_BY_ID_SQL, id) > 0;
+    public void delete(long id) {
+        jdbcTemplate.update(DELETE_TAG_BY_ID_SQL, id);
     }
 
     public void createWithReference(Tag tag, long certificateId) {

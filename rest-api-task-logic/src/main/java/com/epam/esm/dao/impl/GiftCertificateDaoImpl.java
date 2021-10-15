@@ -43,6 +43,8 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
             "price = ?, last_update_date=NOW(), duration = ? WHERE id = ?";
     private static final String CREATE_NEW_CERTIFICATE_SQL = "INSERT INTO gift_certificate " +
             "(name, description, price, duration) VALUES (:name, :description, :price, :duration)";
+    private static final String DELETE_BY_ID = "DELETE FROM gift_certificate WHERE id=?";
+    private static final String DELETE_BY_ID_FROM_COMMON_TABLE = "DELETE FROM certificates_tags WHERE certificate_id=?";
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, GiftCertificateExtractor giftCertificateExtractor, QueryBuilder queryBuilder) {
@@ -89,8 +91,11 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
     }
 
     @Override
-    public boolean delete(long id) {
-        throw new UnsupportedOperationException("Operation is not supported");
+    public void delete(long id) {
+        jdbcTemplate.update(DELETE_BY_ID, id);
     }
 
+    public void deleteFromTagCertificateAssociateTable(long id) {
+        jdbcTemplate.update(DELETE_BY_ID_FROM_COMMON_TABLE, id);
+    }
 }

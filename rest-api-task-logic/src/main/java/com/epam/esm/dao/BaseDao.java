@@ -20,6 +20,6 @@ public interface BaseDao<T extends BaseEntity> {
 
     T update(T t);
 
-    boolean delete(long id);
+    void delete(long id);
 
 }

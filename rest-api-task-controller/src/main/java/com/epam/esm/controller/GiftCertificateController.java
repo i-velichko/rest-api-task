@@ -63,4 +63,10 @@ public class GiftCertificateController {
     public GiftCertificateDto update(@RequestBody @Valid GiftCertificateDto giftCertificateDto) {
         return giftCertificateService.update(giftCertificateDto);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        giftCertificateService.delete(id);
+    }
 }

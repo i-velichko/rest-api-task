@@ -100,4 +100,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         }
         return certificateMapper.toDto(updatedCertificate);
     }
+
+    @Transactional
+    @Override
+    public void delete(long id) {
+        if (giftCertificateDao.findBy(id).isEmpty()) {
+            throw new NoSuchEntityException();
+        }
+        giftCertificateDao.deleteFromTagCertificateAssociateTable(id);
+        giftCertificateDao.delete(id);
+    }
 }
