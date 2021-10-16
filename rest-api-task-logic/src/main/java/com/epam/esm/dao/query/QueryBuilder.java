@@ -3,8 +3,10 @@ package com.epam.esm.dao.query;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static com.epam.esm.mapper.ParamName.*;
+import static java.util.Objects.*;
 
 /**
  * @author Ivan Velichko
@@ -21,18 +23,10 @@ public class QueryBuilder {
             "or c.description ILIKE '%s') ";
 
     public String buildQueryForSearch(Map<String, String> params) {
+        params.entrySet().stream().filter(entry -> isNull(entry.getValue())).forEach(entry -> entry.setValue(EMPTY_LINE));
         String tag = params.get(TAG);
-        if (tag == null) {
-            tag = EMPTY_LINE;
-        }
         String search = params.get(SEARCH);
-        if (search == null) {
-            search = EMPTY_LINE;
-        }
         String order = params.get(ORDER);
-        if (order == null) {
-            order = EMPTY_LINE;
-        }
         String query = String.format(params.get(QUERY) + SEARCH_SQL, PERCENT + tag
                 + PERCENT, PERCENT + search + PERCENT, PERCENT + search + PERCENT);
         StringBuilder sb = new StringBuilder(query);
@@ -42,4 +36,5 @@ public class QueryBuilder {
         }
         return sb.toString();
     }
+
 }

@@ -11,7 +11,7 @@ CREATE TABLE GIFT_CERTIFICATE
     name             VARCHAR(100) NOT NULL,
     price            DECIMAL(5, 2),
     create_date      TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    last_update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    last_update_date TIMESTAMP ,
     duration         INT,
     description      VARCHAR(200),
     PRIMARY KEY (id)

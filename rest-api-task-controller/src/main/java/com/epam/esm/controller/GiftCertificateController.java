@@ -40,7 +40,7 @@ public class GiftCertificateController {
             @RequestParam(required = false, name = "search") String search,
             @RequestParam(required = false, name = "sort") String sort,
             @RequestParam(required = false, name = "order", defaultValue = "ASC") String order) {
-        if (ObjectUtils.allNotNull(tag, search, sort, order)) {
+        if (ObjectUtils.allNull(tag, search, sort)) {
             return giftCertificateService.findAll();
         } else {
             Map<String, String> params = new HashMap<>();
