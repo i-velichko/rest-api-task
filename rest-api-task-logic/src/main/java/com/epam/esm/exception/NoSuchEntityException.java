@@ -5,6 +5,7 @@ package com.epam.esm.exception;
  * @date 03.10.2021 18:40
  */
 public class NoSuchEntityException extends RuntimeException {
+
     public NoSuchEntityException() {
     }
 

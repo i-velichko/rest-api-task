@@ -22,4 +22,5 @@ public interface GiftCertificateService {
     GiftCertificateDto update(GiftCertificateDto giftCertificateDto);
 
     public void delete(long id);
+
 }

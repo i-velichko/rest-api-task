@@ -16,4 +16,5 @@ public class CustomErrorMessageCode {
     public static final String CERTIFICATE_DESCRIPTION_INCORRECT = "error.message.certificate.description.incorrect";;
     public static final String CERTIFICATE_PRICE_INCORRECT = "error.message.certificate.price.incorrect";
     public static final String CERTIFICATE_DURATION_INCORRECT = "error.message.certificate.duration.incorrect";
+    public static final String PARAMETER_NOT_FOUND = "error.message.not.found.parameter";
 }

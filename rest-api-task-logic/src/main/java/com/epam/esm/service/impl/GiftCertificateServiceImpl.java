@@ -5,8 +5,10 @@ import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.CustomErrorMessageCode;
 import com.epam.esm.exception.DuplicateEntityException;
 import com.epam.esm.exception.NoSuchEntityException;
+import com.epam.esm.exception.NoSuchParameterException;
 import com.epam.esm.mapper.GiftCertificateMapper;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateMerger;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static com.epam.esm.exception.CustomErrorMessageCode.CERTIFICATE_ALREADY_EXIST;
 import static com.epam.esm.exception.CustomErrorMessageCode.CERTIFICATE_NOT_FOUND;
+import static com.epam.esm.mapper.ParamName.*;
 
 /**
  * @author Ivan Velichko
@@ -59,10 +62,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> findAllBy(Map<String, String> params) {
-        return giftCertificateDao.findAllBy(params)
-                .stream()
-                .map(certificateMapper::toDto)
-                .collect(Collectors.toList());
+        List<String> sortParams = List.of(TAG, SORT, SEARCH, ORDER);
+        if (params.isEmpty()) {
+            return findAll();
+        } else if (params.keySet().stream().noneMatch(param1 -> sortParams.stream().anyMatch(param1::equals))) {
+            throw new NoSuchParameterException(CustomErrorMessageCode.PARAMETER_NOT_FOUND);
+        } else {
+            sortParams.forEach(sortParam -> params.putIfAbsent(sortParam, EMPTY_LINE));
+            return giftCertificateDao.findAllBy(params)
+                    .stream()
+                    .map(certificateMapper::toDto)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
@@ -110,4 +121,5 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         giftCertificateDao.deleteFromTagCertificateAssociateTable(id);
         giftCertificateDao.delete(id);
     }
+
 }

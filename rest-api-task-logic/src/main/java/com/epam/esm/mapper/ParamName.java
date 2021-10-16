@@ -19,4 +19,6 @@ public class ParamName {
     public static final String ORDER = "order";
     public static final String QUERY = "query";
     public static final String SORT = "sort";
+    public static final String ASC = "ASC";
+    public static final String EMPTY_LINE = "";
 }

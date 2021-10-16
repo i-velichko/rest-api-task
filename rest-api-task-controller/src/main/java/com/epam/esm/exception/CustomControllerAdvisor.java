@@ -41,6 +41,8 @@ public class CustomControllerAdvisor {
     private int DUPLICATE_ENTITY_CODE;
     @Value("${method.argument.not.valid.code}")
     private int METHOD_ARGUMENT_NOT_VALID_CODE;
+    @Value("${no.such.parameter.code}")
+    private int NO_SUCH_PARAMETER_CODE;
 
     @Autowired
     public CustomControllerAdvisor(I18nManager i18nManager) {
@@ -81,6 +83,13 @@ public class CustomControllerAdvisor {
         BindingResult bindingResult = e.getBindingResult();
         List<String> errors = i18nManager.getLocaleValidationErrorMessages(bindingResult, locale);
         CustomValidationResponse response = new CustomValidationResponse(errors, METHOD_ARGUMENT_NOT_VALID_CODE);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoSuchParameterException.class)
+    public ResponseEntity<CustomResponse> handleNoSuchParameterException(NoSuchParameterException e, Locale locale) {
+        String localeMsg = i18nManager.getMessage(e.getMessage(), locale);
+        CustomResponse response = new CustomResponse(localeMsg, NO_SUCH_PARAMETER_CODE);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

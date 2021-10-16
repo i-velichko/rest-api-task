@@ -2,13 +2,11 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.service.GiftCertificateService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,21 +33,8 @@ public class GiftCertificateController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<GiftCertificateDto> findAll(
-            @RequestParam(required = false, name = "tag") String tag,
-            @RequestParam(required = false, name = "search") String search,
-            @RequestParam(required = false, name = "sort") String sort,
-            @RequestParam(required = false, name = "order", defaultValue = "ASC") String order) {
-        if (ObjectUtils.allNull(tag, search, sort)) {
-            return giftCertificateService.findAll();
-        } else {
-            Map<String, String> params = new HashMap<>();
-            params.put("tag", tag);
-            params.put("search", search);
-            params.put("sort", sort);
-            params.put("order", order);
-            return giftCertificateService.findAllBy(params);
-        }
+    public List<GiftCertificateDto> findAll(@RequestParam Map<String, String> params) {
+        return giftCertificateService.findAllBy(params);
     }
 
     @PostMapping
