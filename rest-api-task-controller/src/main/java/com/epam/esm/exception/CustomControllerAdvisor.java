@@ -29,6 +29,7 @@ import static com.epam.esm.exception.CustomErrorMessageCode.TAG_CAN_NOT_BE_REMOV
 @ControllerAdvice
 @PropertySource("classpath:error_code.properties")
 public class CustomControllerAdvisor {
+    private static final String UNDEFINED_DAO = "undefined dao";
     private final I18nManager i18nManager;
 
     @Value("${no.such.entity.code}")
@@ -43,6 +44,8 @@ public class CustomControllerAdvisor {
     private int METHOD_ARGUMENT_NOT_VALID_CODE;
     @Value("${no.such.parameter.code}")
     private int NO_SUCH_PARAMETER_CODE;
+    @Value("${convert.entity.error.code")
+    private int CONVERT_ENTITY_ERROR_CODE;
 
     @Autowired
     public CustomControllerAdvisor(I18nManager i18nManager) {
@@ -93,6 +96,13 @@ public class CustomControllerAdvisor {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ConvertEntityException.class)
+    public ResponseEntity<CustomResponse> handleConvertEntityException(ConvertEntityException e, Locale locale) {
+        String localeMsg = i18nManager.getMessage(e.getMessage(), locale);
+        CustomResponse response = new CustomResponse(localeMsg, CONVERT_ENTITY_ERROR_CODE);
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     private String getEntityNameByMsg(Exception e, String beforeName, String afterName) {
         String text = msgFromStack(e, afterName);
         return text.substring(text.lastIndexOf(beforeName) + 1, text.indexOf(afterName));
@@ -103,6 +113,6 @@ public class CustomControllerAdvisor {
                 .map(StackTraceElement::getClassName)
                 .filter(className -> className.contains(afterName))
                 .findAny();
-        return dao.get();
+        return dao.orElse(UNDEFINED_DAO);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 import static com.epam.esm.mapper.ParamName.*;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * @author Ivan Velichko
@@ -26,7 +27,7 @@ public class QueryBuilder {
         String query = String.format(params.get(QUERY) + SEARCH_SQL, PERCENT + tag
                 + PERCENT, PERCENT + search + PERCENT, PERCENT + search + PERCENT);
         StringBuilder sb = new StringBuilder(query);
-        if (params.get(SORT) != null && !params.get(SORT).isEmpty()) {
+        if (isNotEmpty(params.get(SORT)) && !params.get(SORT).isEmpty()) {
             sb.append(ORDER_BY).append(params.get(SORT)).append(SPACE).append(order);
         }
         return sb.toString();

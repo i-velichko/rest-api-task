@@ -2,11 +2,12 @@ package com.epam.esm.mapper;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.ConvertEntityException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import static java.util.Objects.nonNull;
 
 /**
  * @author Ivan Velichko
@@ -24,10 +25,18 @@ public class TagMapper {
     }
 
     public Tag toEntity(TagDto tagDto) {
-        return Objects.isNull(tagDto) ? null : mapper.map(tagDto, Tag.class);
+        if (nonNull(tagDto)) {
+            return mapper.map(tagDto, Tag.class);
+        } else {
+            throw new ConvertEntityException("Tag conversion error");
+        }
     }
 
     public TagDto toDto(Tag tag) {
-        return Objects.isNull(tag) ? null : mapper.map(tag, TagDto.class);
+        if (nonNull(tag)) {
+            return mapper.map(tag, TagDto.class);
+        } else {
+            throw new ConvertEntityException("Tag conversion error");
+        }
     }
 }

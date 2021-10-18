@@ -2,11 +2,12 @@ package com.epam.esm.mapper;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.exception.ConvertEntityException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import static java.util.Objects.nonNull;
 
 /**
  * @author Ivan Velichko
@@ -23,10 +24,18 @@ public class GiftCertificateMapper {
     }
 
     public GiftCertificate toEntity(GiftCertificateDto dto) {
-        return Objects.isNull(dto) ? null : mapper.map(dto, GiftCertificate.class);
+        if (nonNull(dto)) {
+            return mapper.map(dto, GiftCertificate.class);
+        } else {
+            throw new ConvertEntityException("Certificate conversion error");
+        }
     }
 
     public GiftCertificateDto toDto(GiftCertificate entity) {
-        return Objects.isNull(entity) ? null : mapper.map(entity, GiftCertificateDto.class);
+        if (nonNull(entity)) {
+            return mapper.map(entity, GiftCertificateDto.class);
+        } else {
+            throw new ConvertEntityException("Certificate conversion error");
+        }
     }
 }

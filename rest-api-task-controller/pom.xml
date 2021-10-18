@@ -21,10 +21,9 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <spring.version>5.3.10</spring.version>
         <javax.servlet.version>2.5</javax.servlet.version>
-        <javax.servlet.version>2.5</javax.servlet.version>
-        <com.fasterxml.jackson.core.version>2.12.5</com.fasterxml.jackson.core.version>
-        <com.fasterxml.jackson.datatype.version>2.13.0</com.fasterxml.jackson.datatype.version>
-        <com.github.java-json-tools.version>1.12</com.github.java-json-tools.version>
+        <jackson.core.version>2.12.5</jackson.core.version>
+        <jackson.datatype.version>2.13.0</jackson.datatype.version>
+        <java-json-tools.version>1.12</java-json-tools.version>
     </properties>
 
     <dependencies>
@@ -57,22 +56,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${com.fasterxml.jackson.core.version}</version>
+            <version>${jackson.core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${com.fasterxml.jackson.datatype.version}</version>
+            <version>${jackson.datatype.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.java-json-tools</groupId>
             <artifactId>json-patch</artifactId>
-            <version>${com.github.java-json-tools.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>${java-json-tools.version}</version>
         </dependency>
     </dependencies>
 
