@@ -43,8 +43,12 @@ class GiftCertificateDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        giftCertificate = new GiftCertificate(NEW_NAME, NEW_DESCRIPTION, NEW_PRICE,
-                LocalDateTime.now(), LocalDateTime.now(), NEW_DURATION);
+        giftCertificate = new GiftCertificate();
+        giftCertificate.setName(NEW_NAME);
+        giftCertificate.setDescription(NEW_DESCRIPTION);
+        giftCertificate.setPrice(NEW_PRICE);
+        giftCertificate.setCreateDate(LocalDateTime.now());
+        giftCertificate.setDuration(NEW_DURATION);
 
         filterParams = new HashMap<>();
         filterParams.put("tag", "epam");
@@ -80,7 +84,7 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void findByNamePositive() {
-        Optional<GiftCertificate> actual = toTest.findBy(NEW_NAME);
+        Optional<GiftCertificate> actual = toTest.findBy("certificate 1");
         assertTrue(actual.isPresent());
     }
 

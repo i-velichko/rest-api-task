@@ -14,7 +14,6 @@ import static com.epam.esm.mapper.ParamName.*;
 @Component
 public class QueryBuilder {
     private static final String SPACE = " ";
-    private static final String EMPTY_LINE = "";
     private static final String PERCENT = "%";
     private static final String ORDER_BY = " ORDER BY ";
     private static final String SEARCH_SQL = "WHERE t.name ILIKE '%s' and (c.name ILIKE '%s' " +

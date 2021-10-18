@@ -42,6 +42,17 @@ public class GiftCertificateDto extends BaseDto {
     public GiftCertificateDto() {
     }
 
+    public GiftCertificateDto(long id, String name, String description, BigDecimal price, LocalDateTime createDate, LocalDateTime lastUpdateDate, int duration, Set<TagDto> tags) {
+        super(id);
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.lastUpdateDate = lastUpdateDate;
+        this.duration = duration;
+        this.tags = tags;
+    }
+
     public String getName() {
         return name;
     }
