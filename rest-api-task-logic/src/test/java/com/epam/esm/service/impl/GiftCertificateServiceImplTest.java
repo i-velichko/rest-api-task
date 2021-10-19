@@ -9,6 +9,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.NoSuchEntityException;
 import com.epam.esm.exception.NoSuchParameterException;
 import com.epam.esm.mapper.GiftCertificateMapper;
+import com.epam.esm.validator.impl.GiftCertificateDataValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -38,6 +39,8 @@ class GiftCertificateServiceImplTest {
     private TagDaoImpl tagDao;
     @Mock
     private GiftCertificateMapper mapper;
+    @Mock
+    private GiftCertificateDataValidator validator;
 
     @BeforeEach
     void setUp() {
@@ -63,7 +66,7 @@ class GiftCertificateServiceImplTest {
         when(mapper.toDto(eq(certificate3))).thenReturn(certificate1);
         when(mapper.toDto(eq(certificate4))).thenReturn(certificate2);
 
-        toTest = new GiftCertificateServiceImpl(giftCertificateDao, tagDao, mapper);
+        toTest = new GiftCertificateServiceImpl(giftCertificateDao, tagDao, mapper, validator);
     }
 
     @Test

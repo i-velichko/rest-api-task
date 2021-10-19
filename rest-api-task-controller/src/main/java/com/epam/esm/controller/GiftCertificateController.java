@@ -45,7 +45,7 @@ public class GiftCertificateController {
 
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public GiftCertificateDto update(@RequestBody @Valid GiftCertificateDto giftCertificateDto) {
+    public GiftCertificateDto update(@RequestBody GiftCertificateDto giftCertificateDto) {
         return giftCertificateService.update(giftCertificateDto);
     }
 

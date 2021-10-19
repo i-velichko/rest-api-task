@@ -44,7 +44,7 @@ public class CustomControllerAdvisor {
     private int METHOD_ARGUMENT_NOT_VALID_CODE;
     @Value("${no.such.parameter.code}")
     private int NO_SUCH_PARAMETER_CODE;
-    @Value("${convert.entity.error.code")
+    @Value("${convert.entity.error.code}")
     private int CONVERT_ENTITY_ERROR_CODE;
 
     @Autowired

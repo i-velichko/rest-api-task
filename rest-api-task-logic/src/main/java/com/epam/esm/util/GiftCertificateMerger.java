@@ -42,6 +42,5 @@ public class GiftCertificateMerger {
             tags.stream().filter(Objects::nonNull).forEach(tag -> previous.getTags().add(tag));
         }
 
-
     }
 }

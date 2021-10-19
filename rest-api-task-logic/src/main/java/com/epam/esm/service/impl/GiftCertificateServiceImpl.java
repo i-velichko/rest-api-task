@@ -12,6 +12,7 @@ import com.epam.esm.exception.NoSuchParameterException;
 import com.epam.esm.mapper.GiftCertificateMapper;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateMerger;
+import com.epam.esm.validator.impl.GiftCertificateDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,12 +37,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDaoImpl giftCertificateDao;
     private final TagDaoImpl tagDao;
     private final GiftCertificateMapper certificateMapper;
+    private GiftCertificateDataValidator certificateDataValidator;
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDaoImpl giftCertificateDao, TagDaoImpl tagDao, GiftCertificateMapper certificateMapper) {
+    public GiftCertificateServiceImpl(GiftCertificateDaoImpl giftCertificateDao, TagDaoImpl tagDao, GiftCertificateMapper certificateMapper, GiftCertificateDataValidator certificateDataValidator) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
         this.certificateMapper = certificateMapper;
+        this.certificateDataValidator = certificateDataValidator;
     }
 
     @Override
@@ -84,15 +87,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         boolean ifExist = giftCertificateDao.findBy(giftCertificate.getId()).isPresent();
         if (!ifExist) {
             newGiftCertificate = giftCertificateDao.create(giftCertificate);
-            long certificateId = giftCertificate.getId();
+            long certificateId = newGiftCertificate.getId();
             Set<Tag> tags = giftCertificate.getTags();
             if (!tags.isEmpty()) {
                 tags.forEach(tag -> tagDao.createWithReference(tag, certificateId));
             }
+            giftCertificateDao.findBy(certificateId);
+            return findBy(certificateId);
         } else {
             throw new DuplicateEntityException(CERTIFICATE_ALREADY_EXIST);
         }
-        return certificateMapper.toDto(newGiftCertificate);
     }
 
     @Override
@@ -102,12 +106,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (giftCertificateDto != null) {
             GiftCertificate newGiftCertificate = certificateMapper.toEntity(giftCertificateDto);
             GiftCertificate previousCertificate = certificateMapper.toEntity(findBy(giftCertificateDto.getId()));
-            GiftCertificateMerger.merge(newGiftCertificate, previousCertificate);
-            updatedCertificate = giftCertificateDao.update(previousCertificate);
-            previousCertificate.getTags()
-                    .stream()
-                    .filter(tag -> tagDao.findBy(tag.getName()).isEmpty())
-                    .forEach(tag -> tagDao.createWithReference(tag, previousCertificate.getId()));
+            updatedCertificate = certificateDataValidator.checkDataForUpdateCertificate(newGiftCertificate, previousCertificate);
+            if (updatedCertificate != null) {
+                GiftCertificateMerger.merge(updatedCertificate, previousCertificate);
+                updatedCertificate = giftCertificateDao.update(previousCertificate);
+                long id = updatedCertificate.getId();
+                previousCertificate.getTags()
+                        .stream().filter(tag -> tagDao.findBy(tag.getName()).isEmpty())
+                        .forEach(tag -> tagDao.createWithReference(tag, id));
+            }
         }
         return certificateMapper.toDto(updatedCertificate);
     }

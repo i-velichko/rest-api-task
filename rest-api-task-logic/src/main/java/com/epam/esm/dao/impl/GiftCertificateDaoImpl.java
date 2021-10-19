@@ -12,6 +12,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -68,6 +70,12 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
         return jdbcTemplate.query(FIND_ALL_CERTIFICATES_WITH_TAGS_SQL, giftCertificateExtractor);
     }
 
+    public List<GiftCertificate> findAllBy(Map<String, String> params) {
+        params.put(QUERY, FIND_ALL_CERTIFICATES_WITH_TAGS_SQL);
+        String sqlQuery = queryBuilder.buildQueryForSearch(params);
+        return jdbcTemplate.query(sqlQuery, giftCertificateExtractor);
+    }
+
     @Override
     public Optional<GiftCertificate> findBy(long id) {
         return jdbcTemplate.query(FIND_CERTIFICATE_BY_ID_SQL, giftCertificateExtractor, id).stream().findAny();
@@ -80,14 +88,17 @@ public class GiftCertificateDaoImpl implements BaseDao<GiftCertificate> {
 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-        namedParameterJdbcTemplate.update(CREATE_NEW_CERTIFICATE_SQL, new BeanPropertySqlParameterSource(giftCertificate));
+        jdbcTemplate.update(con -> {
+            PreparedStatement statement = con.prepareStatement(UPDATE_GIFT_CERTIFICATE_SQL,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            statement.setString(1, giftCertificate.getName());
+            statement.setString(2, giftCertificate.getDescription());
+            statement.setBigDecimal(3, giftCertificate.getPrice());
+            statement.setInt(4, giftCertificate.getDuration());
+            statement.setLong(5, giftCertificate.getId());
+            return statement;
+        });
         return giftCertificate;
-    }
-
-    public List<GiftCertificate> findAllBy(Map<String, String> params) {
-        params.put(QUERY, FIND_ALL_CERTIFICATES_WITH_TAGS_SQL);
-        String sqlQuery = queryBuilder.buildQueryForSearch(params);
-        return jdbcTemplate.query(sqlQuery, giftCertificateExtractor);
     }
 
     @Override
